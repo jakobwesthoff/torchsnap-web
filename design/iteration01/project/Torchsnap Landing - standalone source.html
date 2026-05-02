@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Torchsnap — Landing page directions</title>
+
+<!-- Mascot images are referenced in JSX template strings; the bundler
+     can only see static HTML attributes, so we lift each variant into
+     window.__resources via these meta tags. -->
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-original-384.webp"             data-resource-id="mascot-original"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-cloak-and-torch-384.webp"      data-resource-id="mascot-cloak-and-torch"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-astronaut-384.webp"            data-resource-id="mascot-astronaut"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-dashing-captain-384.webp"      data-resource-id="mascot-dashing-captain"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-dino-kigurumi-384.webp"        data-resource-id="mascot-dino-kigurumi"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-deep-sea-diver-384.webp"       data-resource-id="mascot-deep-sea-diver"/>
+<meta name="ext-resource-dependency" content="assets/mascots/snappy-banana-goggle-minion-384.webp" data-resource-id="mascot-banana-goggle-minion"/>
+
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+  }
+
+  /* Caret used in the live-typing demo + V6 hero */
+  .ts-caret {
+    display: inline-block;
+    width: 2px;
+    height: 18px;
+    background: var(--color-accent);
+    margin-left: 1px;
+    vertical-align: -3px;
+    animation: ts-blink 1.05s steps(1) infinite;
+  }
+  @keyframes ts-blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+
+  /* Cosplay image swap — gentle fade-in on key change */
+  .ts-cosplay-img {
+    animation: ts-pop .55s ease-out;
+  }
+  @keyframes ts-pop {
+    0% { opacity: 0; transform: scale(0.94); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Subtle global link reset for nav anchors */
+  a { text-decoration: none; }
+</style>
+</head>
+<body data-theme="light">
+
+<!-- Splash thumbnail for the bundler — shown while assets unpack and as
+     the no-JS fallback. Torchsnap mark on the dark surface color. -->
+<template id="__bundler_thumbnail" data-bg-color="#0a5e3e">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Glow -->
+    <defs>
+      <radialGradient id="g" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffd166" stop-opacity="0.55"/>
+        <stop offset="60%" stop-color="#ffd166" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="600" cy="400" r="320" fill="url(#g)"/>
+    <!-- Stylised torch flame -->
+    <g transform="translate(600 400)">
+      <path d="M0 -180 C 70 -110 90 -40 60 30 C 100 0 120 -30 110 -90 C 160 -20 150 80 60 130 C -40 170 -130 100 -110 0 C -90 -70 -50 -120 0 -180 Z"
+            fill="#ffd166"/>
+      <path d="M0 -110 C 40 -60 50 -20 30 20 C 70 -10 70 -60 50 -100 C 90 -50 80 30 20 70 C -30 90 -70 60 -60 10 C -55 -30 -30 -70 0 -110 Z"
+            fill="#ff8a3d"/>
+    </g>
+    <!-- Wordmark -->
+    <text x="600" y="660" text-anchor="middle"
+          font-family="Inter, system-ui, sans-serif"
+          font-size="56" font-weight="600" fill="#f4ead2"
+          letter-spacing="-1">Torchsnap</text>
+  </svg>
+</template>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="src/Shared.standalone.jsx"></script>
+<script type="text/babel" src="src/V1ClassicHero.jsx"></script>
+<script type="text/babel" src="src/V1bClassicHeroSnappy.standalone.jsx"></script>
+<script type="text/babel" src="src/V2SnappySays.standalone.jsx"></script>
+<script type="text/babel" src="src/V3LiveDemo.jsx"></script>
+<script type="text/babel" src="src/V4DevDossier.jsx"></script>
+<script type="text/babel" src="src/V5Cosplay.standalone.jsx"></script>
+<script type="text/babel" src="src/V6PageAsLauncher.standalone.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const SNAPPY_VARIANTS = [
+  { id: "original",             name: "Original" },
+  { id: "cloak-and-torch",      name: "Cloak & Torch" },
+  { id: "astronaut",            name: "Astronaut" },
+  { id: "dashing-captain",      name: "Dashing Captain" },
+  { id: "dino-kigurumi",        name: "Dino Kigurumi" },
+  { id: "deep-sea-diver",       name: "Deep Sea Diver" },
+  { id: "banana-goggle-minion", name: "Banana Minion" },
+];
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "dark",
+  "snappy": "original"
+}/*EDITMODE-END*/;
+
+const App = () => {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  // Resolve theme: system → match prefers-color-scheme; otherwise explicit.
+  useEffect(() => {
+    const apply = () => {
+      let mode = tweaks.theme;
+      if (mode === "system") {
+        mode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.body.dataset.theme = mode;
+      document.documentElement.dataset.theme = mode;
+    };
+    apply();
+    if (tweaks.theme === "system" && window.matchMedia) {
+      const mq = window.matchMedia("(prefers-color-scheme: dark)");
+      const fn = () => apply();
+      mq.addEventListener("change", fn);
+      return () => mq.removeEventListener("change", fn);
+    }
+  }, [tweaks.theme]);
+
+  const v = tweaks.snappy;
+
+  return (
+    <React.Fragment>
+      <DesignCanvas>
+        <DCSection id="safe" title="Safe directions" subtitle="Closer to standard one-pager patterns. Pick the spine, riff on the rest.">
+          <DCArtboard id="v1" label="01 · Classic Hero" width={1280} height={920}>
+            <V1ClassicHero/>
+          </DCArtboard>
+          <DCArtboard id="v1b" label="01b · Classic Hero + Snappy" width={1280} height={920}>
+            <V1bClassicHeroSnappy snappyVariant={v}/>
+          </DCArtboard>
+          <DCArtboard id="v2" label="02 · Snappy Says Hi" width={1280} height={1020}>
+            <V2SnappySays snappyVariant={v}/>
+          </DCArtboard>
+          <DCArtboard id="v3" label="03 · Live Demo" width={1280} height={950}>
+            <V3LiveDemo/>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="adventurous" title="Adventurous directions" subtitle="Lean into the brand. Stronger metaphors, more personality.">
+          <DCArtboard id="v4" label="04 · Developer Dossier" width={1280} height={1100}>
+            <V4DevDossier/>
+          </DCArtboard>
+          <DCArtboard id="v5" label="05 · Cosplay Carousel" width={1280} height={920}>
+            <V5Cosplay/>
+          </DCArtboard>
+          <DCArtboard id="v6" label="06 · Page-as-Launcher" width={1280} height={1100}>
+            <V6PageAsLauncher/>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel>
+        <TweakSection title="Theme">
+          <TweakRadio
+            label="Mode"
+            value={tweaks.theme}
+            onChange={(v) => setTweak("theme", v)}
+            options={[
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
+              { value: "system", label: "System" },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Snappy mascot" subtitle="Affects 02 & 05 (and the perch in any other variant)">
+          <TweakSelect
+            label="Variant"
+            value={tweaks.snappy}
+            onChange={(v) => setTweak("snappy", v)}
+            options={SNAPPY_VARIANTS.map(s => ({ value: s.id, label: s.name }))}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </React.Fragment>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+</body>
+</html>
