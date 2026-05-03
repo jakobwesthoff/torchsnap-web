@@ -7,8 +7,16 @@ import FeatureRow from "../landing/FeatureRow.astro";
 ---
 
 <Layout>
-  <Hero />
-  <HotkeyBanner />
+  {/* Hero + HotkeyBanner together fill at least the first viewport
+      "page" (minus the sticky header). Hero takes any extra space via
+      `flex-1`, vertically centring its content; HotkeyBanner keeps
+      its natural size and sits flush against the fold so the user
+      always sees it as the bottom of the initial screen, with the
+      next section discoverable on scroll. */}
+  <div class="flex min-h-[calc(100svh-4.5rem)] flex-col">
+    <Hero />
+    <HotkeyBanner />
+  </div>
   <MascotTheater />
   <FeatureRow />
 </Layout>
