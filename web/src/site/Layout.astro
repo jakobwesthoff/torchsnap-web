@@ -16,22 +16,31 @@ interface Props {
   noindex?: boolean;
 }
 
+// Defaults mirror the hero copy verbatim so social previews promise
+// what the visitor actually lands on. They're shorter / longer than
+// the 50-60 / 110-160 SEO heuristics respectively, but trading strict
+// conformance for single-source authenticity is the right call here:
+// the alternative is inventing parallel marketing copy that drifts
+// out of sync with the live page.
 const {
-  title = "Torchsnap",
-  description = "Keyboard-first launcher for the apps, files, and small tasks you reach for all day.",
+  title = "Torchsnap — Strike a key, light the way.",
+  description = "Torchsnap is a keyboard-first launcher for the apps, files, and small tasks you reach for all day. A tiny window, a single hotkey, and a plugin ecosystem to make it your own.",
   lang = "en",
   noindex = false,
 } = Astro.props;
 
-// Absolute URLs for social-share meta tags. `Astro.site` comes from
-// the `site` setting in astro.config.mjs; both fall back to a
-// relative path when running with no site configured (e.g. early dev).
-const canonical = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site).toString()
-  : Astro.url.pathname;
-const ogImage = Astro.site
-  ? new URL("/og.png", Astro.site).toString()
-  : "/og.png";
+// Absolute URLs for social-share meta tags. `Astro.url.origin` is
+// the actual host the page is being served from:
+//   - in `astro build` it resolves to the configured `site` origin
+//     (https://torchsnap.app), giving correct production canonicals
+//   - in `astro dev` it resolves to the request origin
+//     (http://localhost:4321 or a *.trycloudflare.com tunnel),
+//     making OG previews work without redeploying
+// Picking origin over the static `Astro.site` setting is what makes
+// share-card validation possible while developing locally.
+const origin = Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, origin).toString();
+const ogImage = new URL("/og.png", origin).toString();
 ---
 
 <html lang={lang}>

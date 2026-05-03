@@ -16,5 +16,14 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Vite blocks dev requests with unfamiliar Host headers as a
+    // CSRF / DNS-rebinding precaution. Each new tunnel session
+    // (`cloudflared tunnel --url http://localhost:4321`) hands out
+    // a random subdomain, so we whitelist the providers we use to
+    // smoke-test OG cards / share previews against the dev server.
+    // Production builds are unaffected.
+    server: {
+      allowedHosts: [".trycloudflare.com"],
+    },
   },
 });
