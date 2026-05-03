@@ -1,0 +1,6 @@
+# Allow every crawler. The sitemap index points at the per-route
+# sitemap(s) generated at build time by @astrojs/sitemap.
+User-agent: *
+Allow: /
+
+Sitemap: https://torchsnap.app/sitemap-index.xml
