@@ -1,57 +1,8 @@
 ---
 import Layout from "../site/Layout.astro";
+import Hero from "../landing/Hero.astro";
 ---
 
 <Layout>
-  <div class="space-y-12 px-6 py-20 lg:px-16">
-    <section class="space-y-4">
-      <p class="text-sm font-bold uppercase tracking-[0.18em] text-accent">
-        Token smoke test
-      </p>
-      <h1 class="text-6xl font-semibold tracking-tight">
-        Strike a key, <span class="text-accent">light the way.</span>
-      </h1>
-      <p class="max-w-prose text-lg text-text-secondary">
-        Placeholder body until the real sections land. The header, footer,
-        and theme toggle below are the freshly-built site chrome.
-      </p>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-sm font-semibold uppercase tracking-wider text-text-label">
-        Surfaces
-      </h2>
-      <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <div class="rounded-lg border border-border bg-surface p-4">
-          <code class="text-xs text-text-muted">bg-surface</code>
-        </div>
-        <div class="rounded-lg border border-border bg-surface-inset p-4">
-          <code class="text-xs text-text-muted">bg-surface-inset</code>
-        </div>
-        <div class="rounded-lg border border-border bg-surface-hover p-4">
-          <code class="text-xs text-text-muted">bg-surface-hover</code>
-        </div>
-        <div class="rounded-lg border border-border bg-surface-active p-4">
-          <code class="text-xs text-text-muted">bg-surface-active</code>
-        </div>
-      </div>
-    </section>
-
-    <section class="space-y-3">
-      <h2 class="text-sm font-semibold uppercase tracking-wider text-text-label">
-        Accent
-      </h2>
-      <div class="flex flex-wrap gap-3">
-        <span class="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white">
-          bg-accent
-        </span>
-        <span class="rounded-md bg-accent-hover px-3 py-1.5 text-sm font-medium text-white">
-          bg-accent-hover
-        </span>
-        <span class="rounded-md border border-accent px-3 py-1.5 text-sm font-medium text-accent">
-          text-accent / border-accent
-        </span>
-      </div>
-    </section>
-  </div>
+  <Hero />
 </Layout>
