@@ -4,13 +4,17 @@
 // vertical numeral+kicker strip on the left, a punchy statement
 // in the middle, and a small visual anchor on the right.
 
+import { Icon } from "astro-icon/components";
+
 interface Item {
   n: string;
   kicker: string;
   title: string;
   body: string;
-  visual: "speed" | "trust" | "yours";
+  visual: "speed" | "everywhere" | "open";
 }
+
+const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
 
 const ITEMS: Item[] = [
   {
@@ -18,39 +22,45 @@ const ITEMS: Item[] = [
     kicker: "Speed",
     title: "From thought to result in 80 milliseconds.",
     body:
-      "One global hotkey. The window appears already focused, ranking results before your finger leaves the key. Esc and it's gone — no menu bar, no dock, no afterimage.",
+      "One global hotkey. The window appears already focused, ranking results before your finger leaves the key. Esc and it's gone. No menu bar, no dock, no afterimage.",
     visual: "speed",
   },
   {
     n: "02",
-    kicker: "Trust",
-    title: "Nothing leaves your machine until you say so.",
+    kicker: "Everywhere",
+    title: "One launcher. Three operating systems. Same muscle memory.",
     body:
-      "Every plugin is a sandboxed WebAssembly bundle with a written-down capability list. Clipboard, filesystem, network — each one is opt-in, revocable, and visible at a glance.",
-    visual: "trust",
+      "Cross-platform from day one. Same hotkey, same fuzzy ranker, same plugin format on every desk. macOS today; Linux next, Windows to follow.",
+    visual: "everywhere",
   },
   {
     n: "03",
-    kicker: "Yours",
-    title: "Theme it, extend it, ship your own plugin tonight.",
+    kicker: "Open",
+    title: "No account. No telemetry. No catch.",
     body:
-      "Any language that compiles to wasm32-wasip2. A typed SDK. A directory that's a folder of files, not a marketplace. Bring your own keys, bindings, themes, and tools.",
-    visual: "yours",
+      "Nothing leaves your machine. Nothing to sign up for. The source is on GitHub if you want to verify any of that yourself.",
+    visual: "open",
   },
 ];
 
-const CAPABILITIES = [
-  { name: "clipboard", on: true },
-  { name: "fs.read", on: true },
-  { name: "fs.write", on: false },
-  { name: "network", on: false },
+// Visual anchor for the "Everywhere" card: three OS icons in a row.
+// macOS is rendered as shipping; Linux as next-up; Windows as later.
+// Each gets a different status word so the visual mirrors the roadmap
+// in the body copy without needing a legend.
+const PLATFORMS = [
+  { icon: "simple-icons:apple",   label: "macOS",   status: "shipping" as const },
+  { icon: "simple-icons:linux",   label: "Linux",   status: "next"     as const },
+  { icon: "simple-icons:windows", label: "Windows", status: "later"    as const },
 ];
 
-const LANGUAGES = [
-  { name: "Rust", v: "rustc 1.78" },
-  { name: "TypeScript", v: "node 22" },
-  { name: "Go", v: "go 1.23" },
-  { name: "Zig", v: "zig 0.13" },
+// Visual anchor for the "Open" card: a compact checklist that mirrors
+// the body's proof points so a skim-reader can read either side and
+// land on the same claims.
+const OPEN_PROOFS = [
+  { label: "no account",      on: true },
+  { label: "no telemetry",    on: true },
+  { label: "open source",     on: true },
+  { label: "MPL-2.0",         on: true },
 ];
 ---
 
@@ -114,54 +124,60 @@ const LANGUAGES = [
             </div>
           )}
 
-          {m.visual === "trust" && (
+          {m.visual === "everywhere" && (
             <div
-              class="min-w-[220px] rounded-xl border border-border bg-surface-inset p-3.5 font-mono text-[11px] text-text-secondary"
+              class="flex min-w-[220px] items-end justify-center gap-6 rounded-xl border border-border bg-surface-inset px-5 py-4"
             >
-              <div
-                class="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted"
-              >
-                capabilities
-              </div>
-              {CAPABILITIES.map((c) => (
-                <div class="flex items-center gap-2 py-0.5">
-                  <span
+              {PLATFORMS.map((p) => (
+                <div class="flex flex-col items-center gap-1.5">
+                  <Icon
+                    name={p.icon}
                     class:list={[
-                      "h-2 w-2 rounded-full",
-                      c.on ? "bg-accent" : "bg-border",
+                      "h-8 w-8",
+                      p.status === "shipping" && "text-text-primary",
+                      p.status === "next"     && "text-text-secondary opacity-80",
+                      p.status === "later"    && "text-text-muted opacity-50",
                     ]}
-                  ></span>
-                  <span class={c.on ? "text-text-primary" : "text-text-muted"}>
-                    {c.name}
-                  </span>
+                  />
                   <span
                     class:list={[
-                      "ml-auto text-[9px]",
-                      c.on ? "text-accent" : "text-text-muted",
+                      "font-mono text-[10px] font-bold uppercase tracking-[0.14em]",
+                      p.status === "shipping" && "text-accent",
+                      p.status === "next"     && "text-text-secondary",
+                      p.status === "later"    && "text-text-muted",
                     ]}
                   >
-                    {c.on ? "ALLOW" : "DENY"}
+                    {p.status === "shipping" ? p.label : p.status}
                   </span>
                 </div>
               ))}
             </div>
           )}
 
-          {m.visual === "yours" && (
+          {m.visual === "open" && (
             <div
-              class="flex min-w-[200px] flex-col gap-1.5 rounded-xl border border-border bg-surface-inset px-3.5 py-3 font-mono text-[11px]"
+              class="flex min-w-[220px] flex-col gap-1.5 rounded-xl border border-border bg-surface-inset p-3.5 font-mono text-[11px] text-text-secondary"
             >
               <div
                 class="mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted"
               >
-                build with
+                what we collect
               </div>
-              {LANGUAGES.map((l) => (
-                <div class="flex justify-between gap-3 text-text-primary">
-                  <span>{l.name}</span>
-                  <span class="text-text-muted">{l.v}</span>
+              {OPEN_PROOFS.map((p) => (
+                <div class="flex items-center gap-2 py-0.5">
+                  <Icon name="heroicons:check-circle" class="h-3.5 w-3.5 text-accent" />
+                  <span class="text-text-primary">{p.label}</span>
                 </div>
               ))}
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-2 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] text-accent hover:underline"
+              >
+                <Icon name="simple-icons:github" class="h-3 w-3" />
+                verify on github
+              </a>
             </div>
           )}
         </div>
