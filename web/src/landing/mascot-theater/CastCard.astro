@@ -31,7 +31,7 @@ const { entry, tilt = false } = Astro.props;
     class:list={[
       "relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-dashed sm:aspect-auto sm:h-44",
       entry.silhouette
-        ? "border-text-muted/30 bg-transparent dark:border-white/15 dark:bg-[linear-gradient(180deg,oklch(0.25_0.07_265)_0%,oklch(0.18_0.08_265)_100%)]"
+        ? "border-text-muted/30 bg-[radial-gradient(circle_at_80%_18%,rgb(255_240_200/0.55),transparent_60%),linear-gradient(180deg,oklch(0.96_0.025_265)_0%,oklch(0.90_0.035_270)_100%)] dark:border-white/15 dark:bg-[radial-gradient(circle_at_80%_18%,rgb(255_255_220/0.22),transparent_60%),linear-gradient(180deg,oklch(0.25_0.07_265)_0%,oklch(0.18_0.08_265)_100%)]"
         : "border-accent/35",
     ]}
     style={entry.silhouette
@@ -41,27 +41,27 @@ const { entry, tilt = false } = Astro.props;
     {entry.silhouette && (
       <span
         aria-hidden="true"
-        class="absolute top-4 right-5 h-5 w-5 rounded-full bg-yellow-100/85 shadow-[0_0_18px_rgb(255_255_220/0.55)]"
+        class="absolute top-4 right-5 h-5 w-5 rounded-full bg-yellow-100/90 shadow-[0_0_24px_rgb(255_255_220/0.65),0_0_56px_rgb(255_255_220/0.25)]"
       ></span>
     )}
     <Image
       src={MASCOTS[entry.id]}
       alt=""
-      width={180}
-      height={180}
+      width={250}
+      height={250}
       densities={[1, 2, 3]}
       format="webp"
       class:list={[
         "max-h-[92%] max-w-[92%] object-contain drop-shadow-[0_6px_12px_rgb(0_0_0/0.18)]",
-        entry.silhouette && "opacity-50 [filter:brightness(0)]",
+        entry.silhouette && "opacity-50 [filter:brightness(0)] dark:[filter:brightness(0)_drop-shadow(0_0_6px_rgb(255_255_220/0.22))_drop-shadow(0_0_18px_rgb(255_255_220/0.12))]",
       ]}
     />
   </div>
 
   <div class="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
-    {entry.role}
+    {entry.eyebrow}
   </div>
-  <h3 class="text-xl font-semibold leading-tight tracking-tight">{entry.name}</h3>
+  <h3 class="text-xl font-semibold leading-tight tracking-tight">{entry.headline}</h3>
   <p class="mt-2.5 text-pretty text-sm leading-[1.5] text-text-secondary">
     {entry.body}
   </p>
