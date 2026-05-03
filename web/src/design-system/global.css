@@ -1,2 +1,34 @@
 @import "tailwindcss";
 @import "./theme.css";
+
+/* Inter Variable Font — © The Inter Project Authors
+ * Licensed under the SIL Open Font License 1.1
+ * https://github.com/rsms/inter
+ *
+ * Self-hosted (not loaded from a third-party CDN like Google Fonts)
+ * to keep the site clear of the privacy-law complications German
+ * courts have read into embedding remote fonts. The token
+ * --font-sans in theme.css lists "Inter" as the preferred family,
+ * so anything using the `font-sans` utility picks this up.
+ */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter OpenType features used by the design bundle (per
+ * https://rsms.me/inter):
+ *   cv11 — single-story 'a' (one-bowl form)
+ *   ss01 — open digits (alt 0–9 with more open apertures)
+ *   ss03 — round quotes & commas (curved punctuation glyphs)
+ *
+ * Applied page-wide. The launcher demo overrides this back to
+ * `normal` at its root so the demo matches the real app, which
+ * does not enable these features.
+ */
+body {
+  font-feature-settings: "cv11", "ss01", "ss03";
+}

@@ -32,6 +32,15 @@ Plus the relevant type fragments from `src/types.ts` (`SourcedEntry`,
 - Make the components accept the smaller, demo-shaped props; they
   do not need to support everything the real Launcher passes.
 
+## Notes
+
+- The page-wide `body { font-feature-settings: ... }` rule in
+  `web/src/design-system/global.css` enables Inter's `cv11`, `ss01`,
+  `ss03` features for the marketing copy. The launcher demo must
+  override this back to `normal` at its root container so it
+  matches the real Torchsnap app, which does not enable these
+  features.
+
 ## Out of scope
 
 - The animated demo itself — that is the next todo and consumes
