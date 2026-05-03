@@ -41,6 +41,20 @@ body {
  * content, caps it at 1280px, and applies the standard horizontal
  * gutter (24px on small screens, 64px from `lg`).
  */
+/* Section eyebrow / kicker label: small, bold, uppercase, accent-coloured.
+ * Sits above section headlines and as the catalog tag on cards. */
+@utility eyebrow {
+  @apply text-sm font-bold uppercase tracking-[0.2em] text-accent;
+}
+
+/* Keyboard cap (`<kbd>`) shared structure: bordered, mono, inset
+ * surface. Sizes, shadows, and text colour stay caller-supplied so
+ * the same utility serves the small banner caps, the medium launcher
+ * `Esc` tag, and the large feature-row demo caps. */
+@utility keycap {
+  @apply inline-flex items-center justify-center border border-border bg-surface-inset font-mono font-medium;
+}
+
 @utility section-inner {
   margin-inline: auto;
   max-width: 1280px;
