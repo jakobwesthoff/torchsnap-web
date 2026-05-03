@@ -16,7 +16,10 @@ icon, a title, and a short body. Items from the design:
   title + body.
 - Icons via `astro-icon` with `@iconify-json/heroicons` (the
   project-wide convention for static glyphs — `@heroicons/react`
-  is reserved for use inside React islands).
+  is reserved for use inside React islands). The integration and
+  the heroicons icon set are already installed and wired in
+  `astro.config.mjs`; just `import { Icon } from "astro-icon/components"`
+  and use `<Icon name="heroicons:bolt" />` etc.
 - Responsive: 4 columns at `lg`+, 2 columns at `md`, 1 column at
   `sm`. Top border on the section per the design.
 

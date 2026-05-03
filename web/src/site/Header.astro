@@ -1,0 +1,151 @@
+---
+import { Icon } from "astro-icon/components";
+
+const NAV_LINKS = [
+  { href: "#features", label: "Features" },
+  { href: "#plugins", label: "Plugins" },
+  { href: "#developers", label: "For developers" },
+  { href: "#download", label: "Download" },
+];
+const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
+---
+
+<header
+  class:list={[
+    "group sticky top-0 z-40",
+    // Visual state changes when the page is scrolled past the top.
+    // The data-scrolled attribute is flipped by the script below.
+    "transition-[background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out",
+    "border-b border-transparent bg-transparent",
+    "data-scrolled:border-border-divider data-scrolled:bg-surface/80 data-scrolled:backdrop-blur-md data-scrolled:shadow-[0_1px_2px_rgb(0_0_0/0.04)]",
+  ]}
+  data-site-header
+>
+  <div
+    class:list={[
+      "mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-6 py-5 transition-[padding] duration-200 ease-out lg:px-16",
+      "group-data-scrolled:py-3",
+    ]}
+  >
+    <a href="/" class="inline-flex items-center gap-2">
+      <img
+        src="/mascots/snappy-original-192.webp"
+        srcset="/mascots/snappy-original-96.webp 96w, /mascots/snappy-original-192.webp 192w, /mascots/snappy-original-384.webp 384w"
+        sizes="32px"
+        width="32"
+        height="32"
+        alt=""
+        class="block h-8 w-8 object-contain"
+      />
+      <span class="text-base font-semibold tracking-tight text-text-primary">Torchsnap</span>
+    </a>
+
+    <nav class="hidden items-center gap-7 md:flex" aria-label="Primary">
+      {NAV_LINKS.map((link) => (
+        <a
+          href={link.href}
+          class="text-[13px] font-medium text-text-secondary hover:text-text-primary transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={GITHUB_URL}
+        aria-label="GitHub"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-text-secondary hover:text-text-primary transition-colors"
+      >
+        <Icon name="simple-icons:github" class="h-5 w-5" />
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      class="group inline-flex h-9 w-9 items-center justify-center rounded-md text-text-secondary hover:bg-surface-hover md:hidden"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-mobile-nav-toggle
+    >
+      {/* Hamburger when collapsed, X when expanded — CSS-only swap
+          via aria-expanded on the wrapping `group`. */}
+      <svg
+        class="h-5 w-5 group-aria-expanded:hidden"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+      >
+        <line x1="4" y1="7" x2="20" y2="7" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="17" x2="20" y2="17" />
+      </svg>
+      <svg
+        class="hidden h-5 w-5 group-aria-expanded:block"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+      >
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    class="hidden border-t border-border-divider bg-surface md:hidden"
+    aria-label="Primary mobile"
+  >
+    <ul class="mx-auto flex max-w-[1280px] flex-col gap-1 px-6 py-3">
+      {NAV_LINKS.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="block rounded-md px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block rounded-md px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+        >
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  // Sticky header state: add `data-scrolled` once the user has
+  // scrolled past a small threshold; CSS handles the rest.
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  if (header) {
+    const SCROLL_THRESHOLD = 8;
+    const update = () => {
+      if (window.scrollY > SCROLL_THRESHOLD) {
+        header.dataset.scrolled = "";
+      } else {
+        delete header.dataset.scrolled;
+      }
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+
+  // Mobile nav toggle: only flips aria-expanded and panel visibility.
+  // Icon swap is pure CSS (group-aria-expanded:* on the button).
+  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-nav-toggle]");
+  const panel = document.getElementById("mobile-nav");
+  if (toggle && panel) {
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      toggle.setAttribute("aria-expanded", String(open));
+      panel.classList.toggle("hidden", !open);
+    });
+  }
+</script>

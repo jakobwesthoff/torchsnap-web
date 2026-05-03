@@ -1,0 +1,50 @@
+---
+import { ThemeToggle } from "../theme/ThemeToggle";
+
+const FOOTER_LINKS = [
+  { href: "#", label: "Documentation" },
+  { href: "#", label: "Plugin SDK" },
+  { href: "#", label: "Changelog" },
+  { href: "https://github.com/jakobwesthoff/torchsnap", label: "GitHub", external: true },
+  { href: "/impressum", label: "Impressum" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border-divider bg-surface-inset">
+  <div class="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 py-5 lg:px-16 md:flex-row md:items-center md:justify-between">
+    <div class="flex items-center gap-3 text-xs text-text-muted">
+      <a href="/" class="inline-flex items-center gap-2">
+        <img
+          src="/mascots/snappy-original-96.webp"
+          srcset="/mascots/snappy-original-96.webp 96w, /mascots/snappy-original-192.webp 192w"
+          sizes="24px"
+          width="24"
+          height="24"
+          alt=""
+          class="block h-6 w-6 object-contain"
+        />
+        <span class="text-[13px] font-semibold tracking-tight text-text-primary">Torchsnap</span>
+      </a>
+      <span aria-hidden="true" class="opacity-50">·</span>
+      <span>© {year}</span>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
+        {FOOTER_LINKS.map((link) => (
+          <a
+            href={link.href}
+            class="text-[13px] font-medium text-text-secondary hover:text-text-primary transition-colors"
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <ThemeToggle client:idle />
+    </div>
+  </div>
+</footer>
