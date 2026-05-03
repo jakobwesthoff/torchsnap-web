@@ -6,17 +6,31 @@ import Footer from "./Footer.astro";
 interface Props {
   title?: string;
   description?: string;
+  // Document language. Defaults to English; legal pages with German
+  // content (e.g. /impressum) override to "de" so screen readers and
+  // automated translators apply the correct language model.
+  lang?: string;
+  // Block search-engine indexing. Defaults to false. The Impressum
+  // page sets this to true since the German legal-text content is
+  // not search-relevant for the product.
+  noindex?: boolean;
 }
 
-const { title = "Torchsnap", description = "Keyboard-first launcher for the apps, files, and small tasks you reach for all day." } = Astro.props;
+const {
+  title = "Torchsnap",
+  description = "Keyboard-first launcher for the apps, files, and small tasks you reach for all day.",
+  lang = "en",
+  noindex = false,
+} = Astro.props;
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon-128.png" />
     <script is:inline>
       // Pre-paint theme init: read the persisted preference and apply

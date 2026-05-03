@@ -1,0 +1,240 @@
+---
+// Legal page reachable from the footer. Content is German per § 5 TMG
+// requirements; the document language is therefore overridden to "de"
+// at the Layout level. Combined Impressum + Datenschutz on one page —
+// no separate /datenschutz route — matches the scope of the content
+// (single operator, no analytics, no third-party data flows).
+//
+// Contact details are anti-scraper-encoded with the same XOR + base64
+// pattern used elsewhere in the family of sites, but with a fresh
+// per-site random key so a one-time key compromise does not roll over
+// to other deployments. The plain-text values are recovered at runtime
+// by a small inline script at the bottom of the page; users without
+// JavaScript see a localised note instead.
+
+import Layout from "../site/Layout.astro";
+
+// Anti-scraper-encoded contact strings — see runtime decode block at
+// the bottom. Generated with `tools/generate-impressum-contact.ts`
+// (one-shot script not committed).
+const ENCODED_KEY = "X3TFqWUEpiGJ";
+const PHONE_ENC = "YAd+c1V9eHJURWBieQt+";
+const EMAIL_ENC = "I1YrPwsKPD0RFTwkJVI3fQU6OA==";
+---
+
+<Layout title="Impressum — Torchsnap" lang="de" noindex>
+  <section>
+    <div class="section-inner pt-14 pb-16 lg:pb-24">
+      {/* Long-form text reads best in a narrow measure. 680 px keeps
+          line length around 70-80 characters at the body font-size. */}
+      <article class="mx-auto max-w-[680px]">
+        {/* Page header. The English explanation is wrapped in
+            `lang="en"` so screen readers and translators don't try
+            to apply German pronunciation/translation rules to it
+            inside an otherwise German-language document. */}
+        <header class="pb-6">
+          <h1 class="text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+            Impressum
+          </h1>
+          <p class="mt-3 text-sm text-text-muted">Angaben gemäß § 5 TMG</p>
+          <p
+            lang="en"
+            class="mt-5 text-sm leading-relaxed text-text-muted"
+          >
+            German law requires every commercial website to publish
+            operator and contact information in this exact form. The
+            content below is therefore in German.
+          </p>
+        </header>
+
+        {/* Long-form document rhythm:
+              - section ↔ section:        48 px (pt-12 + border-t)
+              - H2 → first body:          20 px (mt-5)
+              - subsection ↔ subsection:  28 px (mt-7 between groups)
+              - H3 → its first paragraph: 12 px (space-y-3 inside group)
+              - paragraph ↔ paragraph:    16 px (space-y-4)
+            Borrowed from Tailwind Typography / MDN docs scale. */}
+        <div>
+          {/* Operator (Anbieter) per § 5 TMG */}
+          <section>
+            <h2 class="text-xl font-semibold tracking-tight md:text-2xl">
+              Anbieter
+            </h2>
+            <div class="mt-5 space-y-1 leading-relaxed text-text-secondary">
+              <p>Jakob Westhoff</p>
+              <p>Am Bollwerk 6</p>
+              <p>58300 Wetter</p>
+              <p>Deutschland</p>
+            </div>
+            <p class="mt-5 leading-relaxed text-text-secondary">
+              Vertreten durch:<br />Jakob Westhoff
+            </p>
+          </section>
+
+          {/* Contact details. The actual values are filled in by the
+              decode script at the foot of the page. */}
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight md:text-2xl">
+              Kontakt
+            </h2>
+            <div class="mt-5 space-y-1 leading-relaxed text-text-secondary">
+              <p>Telefon: <span data-contact="phone" data-enc={PHONE_ENC}></span></p>
+              <p>E-Mail: <span data-contact="email" data-enc={EMAIL_ENC}></span></p>
+              <noscript>
+                <p class="mt-3 text-sm text-text-muted">
+                  (JavaScript erforderlich, um die Kontaktdaten anzuzeigen.)
+                </p>
+              </noscript>
+            </div>
+          </section>
+
+          {/* Haftungsausschluss — three subsections, each introduced
+              by a smaller H3 with its own top spacing rhythm. */}
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight md:text-2xl">
+              Haftungsausschluss
+            </h2>
+            <div class="mt-5 space-y-4 leading-relaxed text-text-secondary">
+              <h3 class="text-base font-semibold text-text-primary">Haftung für Inhalte</h3>
+              <p>
+                Die Inhalte unserer Seiten wurden mit größter Sorgfalt
+                erstellt. Für die Richtigkeit, Vollständigkeit und
+                Aktualität der Inhalte können wir jedoch keine Gewähr
+                übernehmen. Als Diensteanbieter sind wir gemäß § 7
+                Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach
+                den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis
+                10 TMG sind wir als Diensteanbieter jedoch nicht
+                verpflichtet, übermittelte oder gespeicherte fremde
+                Informationen zu überwachen oder nach Umständen zu
+                forschen, die auf eine rechtswidrige Tätigkeit
+                hinweisen. Verpflichtungen zur Entfernung oder
+                Sperrung der Nutzung von Informationen nach den
+                allgemeinen Gesetzen bleiben hiervon unberührt. Eine
+                diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt
+                der Kenntnis einer konkreten Rechtsverletzung möglich.
+                Bei Bekanntwerden von entsprechenden Rechtsverletzungen
+                werden wir diese Inhalte umgehend entfernen.
+              </p>
+
+              <h3 class="pt-3 text-base font-semibold text-text-primary">Haftung für Links</h3>
+              <p>
+                Unser Angebot enthält Links zu externen Webseiten
+                Dritter, auf deren Inhalte wir keinen Einfluss haben.
+                Deshalb können wir für diese fremden Inhalte auch
+                keine Gewähr übernehmen. Für die Inhalte der
+                verlinkten Seiten ist stets der jeweilige Anbieter
+                oder Betreiber der Seiten verantwortlich. Die
+                verlinkten Seiten wurden zum Zeitpunkt der Verlinkung
+                auf mögliche Rechtsverstöße überprüft. Rechtswidrige
+                Inhalte waren zum Zeitpunkt der Verlinkung nicht
+                erkennbar. Eine permanente inhaltliche Kontrolle der
+                verlinkten Seiten ist jedoch ohne konkrete
+                Anhaltspunkte einer Rechtsverletzung nicht zumutbar.
+                Bei Bekanntwerden von Rechtsverletzungen werden wir
+                derartige Links umgehend entfernen.
+              </p>
+
+              <h3 class="pt-3 text-base font-semibold text-text-primary">Urheberrecht</h3>
+              <p>
+                Die durch die Seitenbetreiber erstellten Inhalte und
+                Werke auf diesen Seiten unterliegen dem deutschen
+                Urheberrecht. Die Vervielfältigung, Bearbeitung,
+                Verbreitung und jede Art der Verwertung außerhalb der
+                Grenzen des Urheberrechtes bedürfen der schriftlichen
+                Zustimmung des jeweiligen Autors bzw. Erstellers.
+                Downloads und Kopien dieser Seite sind nur für den
+                privaten, nicht kommerziellen Gebrauch gestattet.
+                Soweit die Inhalte auf dieser Seite nicht vom Betreiber
+                erstellt wurden, werden die Urheberrechte Dritter
+                beachtet. Insbesondere werden Inhalte Dritter als
+                solche gekennzeichnet. Sollten Sie trotzdem auf eine
+                Urheberrechtsverletzung aufmerksam werden, bitten wir
+                um einen entsprechenden Hinweis. Bei Bekanntwerden von
+                Rechtsverletzungen werden wir derartige Inhalte
+                umgehend entfernen.
+              </p>
+            </div>
+          </section>
+
+          {/* Datenschutz — combined onto the same page since this site
+              has no analytics, no third-party data flows, and no
+              account system. */}
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight md:text-2xl">
+              Datenschutz
+            </h2>
+            <div class="mt-5 space-y-4 leading-relaxed text-text-secondary">
+              <p>
+                Die Nutzung unserer Webseite ist in der Regel ohne
+                Angabe personenbezogener Daten möglich. Soweit auf
+                unseren Seiten personenbezogene Daten (beispielsweise
+                Name, Anschrift oder E-Mail-Adressen) erhoben werden,
+                erfolgt dies, soweit möglich, stets auf freiwilliger
+                Basis. Diese Daten werden ohne Ihre ausdrückliche
+                Zustimmung nicht an Dritte weitergegeben.
+              </p>
+              <p>
+                Wir weisen darauf hin, dass die Datenübertragung im
+                Internet (z. B. bei der Kommunikation per E-Mail)
+                Sicherheitslücken aufweisen kann. Ein lückenloser
+                Schutz der Daten vor dem Zugriff durch Dritte ist
+                nicht möglich.
+              </p>
+              <p>
+                Der Nutzung von im Rahmen der Impressumspflicht
+                veröffentlichten Kontaktdaten durch Dritte zur
+                Übersendung von nicht ausdrücklich angeforderter
+                Werbung und Informationsmaterialien wird hiermit
+                ausdrücklich widersprochen. Die Betreiber der Seiten
+                behalten sich ausdrücklich rechtliche Schritte im
+                Falle der unverlangten Zusendung von
+                Werbeinformationen, etwa durch Spam-Mails, vor.
+              </p>
+            </div>
+          </section>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  {/* Contact-decode runtime. The encoded key + ciphertexts are
+      injected from frontmatter via define:vars so the script body
+      remains plain code that doesn't need template interpolation. */}
+  <script define:vars={{ ENCODED_KEY }}>
+    (() => {
+      const rot13 = (s) =>
+        s.replace(/[a-zA-Z]/g, (c) => {
+          const code = c.charCodeAt(0);
+          const base = code >= 65 && code <= 90 ? 65 : 97;
+          return String.fromCharCode(((code - base + 13) % 26) + base);
+        });
+
+      const key = rot13(ENCODED_KEY);
+
+      const decrypt = (b64) => {
+        const decoded = atob(b64);
+        let out = "";
+        for (let i = 0; i < decoded.length; i++) {
+          out += String.fromCharCode(
+            decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length),
+          );
+        }
+        return out;
+      };
+
+      for (const el of document.querySelectorAll("[data-contact]")) {
+        const enc = el.getAttribute("data-enc");
+        const plain = decrypt(enc);
+        if (el.dataset.contact === "email") {
+          const a = document.createElement("a");
+          a.href = `mailto:${plain}`;
+          a.textContent = plain;
+          a.className = "text-accent hover:underline";
+          el.replaceWith(a);
+        } else {
+          el.textContent = plain;
+        }
+      }
+    })();
+  </script>
+</Layout>

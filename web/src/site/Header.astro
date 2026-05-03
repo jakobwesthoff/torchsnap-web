@@ -4,12 +4,16 @@ import { Image } from "astro:assets";
 import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
 
 // Ordered by where the linked section sits on the page (top → bottom).
+// Hrefs include the explicit `/` prefix so the link works from any
+// route (e.g. /impressum) and not just from the homepage — bare
+// fragments would otherwise just append `#section` to whatever the
+// current path is.
 const NAV_LINKS = [
-  { href: "#download", label: "Download" },
-  { href: "#cast", label: "Wardrobe" },
-  { href: "#features", label: "Convictions" },
-  { href: "#plugins", label: "Plugins" },
-  { href: "#developers", label: "For developers" },
+  { href: "/#download", label: "Download" },
+  { href: "/#cast", label: "Wardrobe" },
+  { href: "/#features", label: "Convictions" },
+  { href: "/#plugins", label: "Plugins" },
+  { href: "/#developers", label: "For developers" },
 ];
 const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
 ---
