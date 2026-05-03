@@ -1,0 +1,95 @@
+---
+// Hotkey banner — one centered sentence with the binding visualised
+// as a pair of keycaps that cycle through alternative combos. The
+// cycle is CSS-only (no JS, no island) and tells the visitor that
+// the hotkey is configurable without spelling it out twice.
+//
+// A real, vendored `KeyCap` component arrives with the launcher
+// leaves (todo …650r); the keys here are inline for now. When the
+// real component lands we can decide whether to swap or keep this
+// banner's lighter inline styling.
+
+interface Combo {
+  keys: string[];
+}
+
+const COMBOS: Combo[] = [
+  { keys: ["⌘", "Space"] },
+  { keys: ["⌃", "Space"] },
+  { keys: ["⌥", "Space"] },
+  { keys: ["⌘", "⇧", "Space"] },
+  { keys: ["F19"] },
+];
+
+// Animation timing
+//   total cycle = COMBOS.length * step
+//   each combo is visible for `step` seconds, then fades to the next.
+const STEP = 2.4; // seconds per combo
+const CYCLE = STEP * COMBOS.length;
+---
+
+<section class="border-t border-border-divider px-6 py-12 text-center lg:px-16">
+  <p class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-base text-text-secondary">
+    <span>Press</span>
+
+    <span class="hotkey-slot relative inline-flex min-h-[28px] min-w-[170px] items-center justify-center">
+      {COMBOS.map((combo, idx) => (
+        <span
+          class="hotkey-combo absolute inset-0 flex items-center justify-center gap-1.5"
+          style={`animation-delay: ${idx * STEP}s;`}
+          aria-hidden={idx === 0 ? undefined : "true"}
+        >
+          {combo.keys.map((k) => (
+            <kbd
+              class="inline-flex h-7 min-w-[28px] items-center justify-center rounded-md border border-border bg-surface-inset px-2 font-mono text-sm font-medium text-text-primary shadow-[inset_0_-1px_0_var(--color-border)]"
+            >
+              {k}
+            </kbd>
+          ))}
+        </span>
+      ))}
+    </span>
+
+    <span>anywhere — that's the whole interaction model.</span>
+  </p>
+
+  <p class="mt-3 text-xs text-text-muted">
+    Configurable — bind it to whatever fits your fingers.
+  </p>
+</section>
+
+<style define:vars={{ cycle: `${CYCLE}s` }}>
+  /* Each .hotkey-combo runs the same fade keyframe; staggered
+     animation-delay on each child means only one is visible at a
+     time. The cycle length and number of combos are kept in sync
+     by computing the percentages from CSS variables in the JS frontmatter. */
+  .hotkey-combo {
+    opacity: 0;
+    animation: hotkey-fade var(--cycle) linear infinite;
+  }
+
+  @keyframes hotkey-fade {
+    0%, 3% {
+      opacity: 0;
+    }
+    /* Fade in over 3% of the cycle (≈0.36s when cycle = 12s). */
+    6%, 17% {
+      opacity: 1;
+    }
+    /* Hold for ~14% of the cycle (≈1.68s), then fade out. */
+    20%, 100% {
+      opacity: 0;
+    }
+  }
+
+  /* Reduced-motion users see the first combo only, statically. */
+  @media (prefers-reduced-motion: reduce) {
+    .hotkey-combo {
+      animation: none;
+      opacity: 0;
+    }
+    .hotkey-combo:first-child {
+      opacity: 1;
+    }
+  }
+</style>
