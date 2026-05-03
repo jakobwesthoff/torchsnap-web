@@ -67,8 +67,15 @@ const OUT = resolve(WEB_ROOT, "public/og.png");
 const W = 1200;
 const H = 630;
 
-// Original app-icon gradient colours (sampled from
-// src-tauri/icons/app-icon-source.png upstream).
+// Dark-mode surface from the design tokens (theme.css). The whole
+// canvas is filled with this — OG cards stay opaque so the asset
+// looks identical across Slack / Discord / Twitter / LinkedIn /
+// Bluesky chrome (all of which composite transparent PNGs against
+// platform-specific backgrounds in inconsistent ways).
+const SURFACE = "#1c1c1e";
+
+// Orange app-icon gradient — used for the eyebrow text fill via
+// background-clip: text.
 const TOP = "#f87316"; // rgb(248,115,22)
 const BOT = "#da7707"; // rgb(218,119,7)
 
@@ -87,6 +94,21 @@ const SNAPPY_VISIBLE_HEIGHT = Math.round(H * 0.65);
 const snappyW = Math.round(SNAPPY_VISIBLE_HEIGHT * (SNAPPY_NATIVE_W / SNAPPY_NATIVE_H));
 const snappyH = SNAPPY_VISIBLE_HEIGHT;
 
+// Site-mirror typography:
+//   - Eyebrow follows the global `.eyebrow` utility — bold (700),
+//     uppercase, 0.2 em tracking — but recoloured here from the flat
+//     accent into the orange gradient via background-clip: text so
+//     it carries the brand colours visibly on the dark surface.
+//   - Wordmark mirrors the hero <h1> — semibold (600), tight
+//     tracking (-0.025 em), tight line-height (1.05). Sized roughly
+//     2× the live page's 64 px for the OG canvas.
+//
+// Eyebrow font size below was measured once (resvg innerBBox of each
+// rendered text) so its rendered width matches the wordmark's width
+// exactly: 30 → 455 px, 124 → 613 px, ratio 1.347 → 40.4 px.
+const EYEBROW_FONT = 40;
+const WORDMARK_FONT = 124;
+
 const tree = (
   <div
     style={{
@@ -97,29 +119,39 @@ const tree = (
       justifyContent: "center",
       gap: 86,
       padding: "0 60px",
-      backgroundImage: `linear-gradient(180deg, ${TOP} 0%, ${BOT} 100%)`,
+      backgroundColor: SURFACE,
     }}
   >
     <img src={snappyDataUrl} width={snappyW} height={snappyH} style={{ display: "block" }} />
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    {/* Text column laid out as block flow rather than a flex gap so
+        the eyebrow's bottom margin (typographic spacing) does the
+        work, not an out-of-band layout property. The rhythm mirrors
+        the live hero: eyebrow `.mb-5` (20 px) above an h1 sized
+        roughly 5× the eyebrow — here the wordmark is ~3× so the
+        margin scales proportionally. */}
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         style={{
-          fontSize: 30,
+          fontSize: EYEBROW_FONT,
           fontWeight: 700,
-          color: "#ffffff",
-          letterSpacing: 6,
+          lineHeight: 1,
+          letterSpacing: EYEBROW_FONT * 0.2,
           textTransform: "uppercase",
+          marginBottom: Math.round(EYEBROW_FONT * 0.6),
+          backgroundImage: `linear-gradient(180deg, ${TOP} 0%, ${BOT} 100%)`,
+          backgroundClip: "text",
+          color: "transparent",
         }}
       >
         Light · Find · Launch
       </div>
       <div
         style={{
-          fontSize: 124,
+          fontSize: WORDMARK_FONT,
           fontWeight: 600,
           color: "#ffffff",
-          letterSpacing: -3,
-          lineHeight: 1,
+          letterSpacing: WORDMARK_FONT * -0.025,
+          lineHeight: 1.05,
         }}
       >
         Torchsnap
