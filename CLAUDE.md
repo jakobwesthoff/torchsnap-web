@@ -14,3 +14,20 @@ Write every ADR plain and to the point:
   on the table.
 - No marketing prose, no padding, no content added just to fill a
   section.
+
+## Source layout
+
+`web/src/` is organized as **vertical slices** per
+<https://tkdodo.eu/blog/the-vertical-codebase>: group code by what
+it accomplishes, not by technical type. Components, hooks, types,
+utilities, and styles for one concern live together in one folder.
+
+- Verticals live at `web/src/<concern>/` (e.g. `theme/`).
+- `web/src/design-system/` holds non-domain shared visuals,
+  utilities, the global stylesheet entry, and the design tokens.
+- Astro-conventional folders stay where Astro expects them:
+  `web/src/pages/`, `web/src/layouts/`.
+- A vertical may be promoted from inline-in-a-page to its own
+  folder once it is shared across pages or grows past a single
+  file. No "rule of three" — promote when the grouping makes
+  reading the code easier.

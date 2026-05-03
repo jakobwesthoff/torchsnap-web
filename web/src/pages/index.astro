@@ -1,5 +1,6 @@
 ---
-import "../styles/global.css";
+import "../design-system/global.css";
+import { ThemeToggle } from "../theme/ThemeToggle";
 ---
 
 <html lang="en">
@@ -8,31 +9,42 @@ import "../styles/global.css";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Torchsnap</title>
     <script is:inline>
-      // Pre-paint theme init: read the persisted choice (set by the
-      // ThemeToggle once it lands), otherwise follow the system
-      // preference. Runs before first paint to avoid a theme flash.
+      // Pre-paint theme init: read the persisted preference and apply
+      // the resolved theme before first paint to avoid a flash. The
+      // value mirrors the API in src/lib/theme.ts:
+      //   "light" / "dark"  → forced
+      //   missing / "system" → follow prefers-color-scheme
       (() => {
         const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const theme = stored ?? (prefersDark ? "dark" : "light");
-        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+        const preference =
+          stored === "light" || stored === "dark" ? stored : "system";
+        const resolved =
+          preference === "system"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+            : preference;
+        if (resolved === "dark") document.documentElement.dataset.theme = "dark";
       })();
     </script>
   </head>
   <body class="bg-surface text-text-primary font-sans antialiased">
     <main class="mx-auto max-w-[1280px] px-16 py-20 space-y-12">
-      <section class="space-y-4">
-        <p class="text-sm font-bold tracking-[0.18em] text-accent uppercase">
-          Token smoke test
-        </p>
-        <h1 class="text-6xl font-semibold tracking-tight">
-          Strike a key, <span class="text-accent">light the way.</span>
-        </h1>
-        <p class="text-lg text-text-secondary max-w-prose">
-          This page exists to verify that the copied design tokens resolve
-          through Tailwind v4 utilities. If the colors below match the
-          Torchsnap app, the wiring is correct.
-        </p>
+      <section class="flex items-start justify-between gap-8">
+        <div class="space-y-4">
+          <p class="text-sm font-bold tracking-[0.18em] text-accent uppercase">
+            Token smoke test
+          </p>
+          <h1 class="text-6xl font-semibold tracking-tight">
+            Strike a key, <span class="text-accent">light the way.</span>
+          </h1>
+          <p class="text-lg text-text-secondary max-w-prose">
+            This page exists to verify that the copied design tokens resolve
+            through Tailwind v4 utilities. Use the toggle to switch
+            preference; "System" follows the OS setting live.
+          </p>
+        </div>
+        <ThemeToggle client:load />
       </section>
 
       <section class="space-y-3">
