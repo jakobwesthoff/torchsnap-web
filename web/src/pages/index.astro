@@ -7,8 +7,101 @@ import "../styles/global.css";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Torchsnap</title>
+    <script is:inline>
+      // Pre-paint theme init: read the persisted choice (set by the
+      // ThemeToggle once it lands), otherwise follow the system
+      // preference. Runs before first paint to avoid a theme flash.
+      (() => {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
   </head>
-  <body>
-    <h1>Torchsnap</h1>
+  <body class="bg-surface text-text-primary font-sans antialiased">
+    <main class="mx-auto max-w-[1280px] px-16 py-20 space-y-12">
+      <section class="space-y-4">
+        <p class="text-sm font-bold tracking-[0.18em] text-accent uppercase">
+          Token smoke test
+        </p>
+        <h1 class="text-6xl font-semibold tracking-tight">
+          Strike a key, <span class="text-accent">light the way.</span>
+        </h1>
+        <p class="text-lg text-text-secondary max-w-prose">
+          This page exists to verify that the copied design tokens resolve
+          through Tailwind v4 utilities. If the colors below match the
+          Torchsnap app, the wiring is correct.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-sm font-semibold text-text-label uppercase tracking-wider">
+          Surfaces
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="rounded-lg border border-border bg-surface p-4">
+            <code class="text-xs text-text-muted">bg-surface</code>
+          </div>
+          <div class="rounded-lg border border-border bg-surface-inset p-4">
+            <code class="text-xs text-text-muted">bg-surface-inset</code>
+          </div>
+          <div class="rounded-lg border border-border bg-surface-hover p-4">
+            <code class="text-xs text-text-muted">bg-surface-hover</code>
+          </div>
+          <div class="rounded-lg border border-border bg-surface-active p-4">
+            <code class="text-xs text-text-muted">bg-surface-active</code>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-sm font-semibold text-text-label uppercase tracking-wider">
+          Text
+        </h2>
+        <p class="text-text-primary">text-text-primary — primary body text</p>
+        <p class="text-text-secondary">text-text-secondary — secondary copy</p>
+        <p class="text-text-tertiary">text-text-tertiary — tertiary detail</p>
+        <p class="text-text-muted">text-text-muted — muted captions</p>
+        <p class="text-text-label">text-text-label — labels</p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-sm font-semibold text-text-label uppercase tracking-wider">
+          Accent
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          <span class="rounded-md bg-accent text-white px-3 py-1.5 text-sm font-medium">
+            bg-accent
+          </span>
+          <span class="rounded-md bg-accent-hover text-white px-3 py-1.5 text-sm font-medium">
+            bg-accent-hover
+          </span>
+          <span class="rounded-md bg-accent-muted text-white px-3 py-1.5 text-sm font-medium">
+            bg-accent-muted
+          </span>
+          <span class="rounded-md border border-accent text-accent px-3 py-1.5 text-sm font-medium">
+            text-accent / border-accent
+          </span>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-sm font-semibold text-text-label uppercase tracking-wider">
+          Borders
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="rounded-lg border border-border bg-surface p-4 text-sm text-text-secondary">
+            border-border
+          </div>
+          <div class="rounded-lg border border-border-input bg-surface p-4 text-sm text-text-secondary">
+            border-border-input
+          </div>
+          <div class="rounded-lg border border-border-divider bg-surface p-4 text-sm text-text-secondary">
+            border-border-divider
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

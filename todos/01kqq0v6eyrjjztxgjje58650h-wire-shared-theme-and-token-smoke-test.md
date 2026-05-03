@@ -23,6 +23,10 @@ design tokens are copied in, not imported across project boundaries.
   back the toggle with the localStorage-persisted state. The toggle
   itself lands in the footer in the base-layout todo; this todo
   only ships the working component and the persistence logic.
+  **Order:** finish the static parts of this todo first (theme.css
+  copy, global.css wiring, pre-paint init, smoke-test page); the
+  dynamic Switch/ThemeToggle copy and persistence wiring come last
+  so the foundation is verifiable on its own.
 - Replace the placeholder `index.astro` with a minimal boilerplate
   page that exercises a handful of token-driven utilities so the
   wiring is visibly correct in `bun run dev` and the toggle works.
