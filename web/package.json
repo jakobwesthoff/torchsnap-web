@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:favicon": "bun run tools/build-favicon.ts"
+    "build:favicon": "bun run tools/build-favicon.ts",
+    "build:og": "bun run tools/build-og.tsx"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.4",
@@ -23,7 +24,12 @@
     "clsx": "^2.1.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "satori": "^0.26.0"
   }
 }

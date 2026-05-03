@@ -7,6 +7,11 @@ import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
+  // Canonical site origin — used by Astro to build absolute URLs for
+  // social-share meta tags (og:url, og:image) and, eventually, the
+  // sitemap. Update if/when the production domain changes.
+  site: "https://torchsnap.app",
+
   integrations: [react(), icon()],
 
   vite: {

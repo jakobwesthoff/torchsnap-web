@@ -22,6 +22,16 @@ const {
   lang = "en",
   noindex = false,
 } = Astro.props;
+
+// Absolute URLs for social-share meta tags. `Astro.site` comes from
+// the `site` setting in astro.config.mjs; both fall back to a
+// relative path when running with no site configured (e.g. early dev).
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).toString()
+  : Astro.url.pathname;
+const ogImage = Astro.site
+  ? new URL("/og.png", Astro.site).toString()
+  : "/og.png";
 ---
 
 <html lang={lang}>
@@ -31,7 +41,27 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon-128.png" />
+
+    {/* Open Graph + Twitter — branded preview when shared. The
+        single static og.png ships from web/public/ and is generated
+        by tools/build-og.ts. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Torchsnap" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Torchsnap — Light · Find · Launch" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Torchsnap — Light · Find · Launch" />
     <script is:inline>
       // Pre-paint theme init: read the persisted preference and apply
       // the resolved theme before first paint to avoid a flash. The
