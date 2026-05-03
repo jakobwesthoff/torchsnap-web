@@ -1,5 +1,7 @@
 ---
 import { ThemeToggle } from "../theme/ThemeToggle";
+import { Image } from "astro:assets";
+import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
 
 const FOOTER_LINKS = [
   { href: "#", label: "Documentation" },
@@ -16,13 +18,13 @@ const year = new Date().getFullYear();
   <div class="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 py-5 lg:px-16 md:flex-row md:items-center md:justify-between">
     <div class="flex items-center gap-3 text-xs text-text-muted">
       <a href="/" class="inline-flex items-center gap-2">
-        <img
-          src="/mascots/snappy-original-96.webp"
-          srcset="/mascots/snappy-original-96.webp 96w, /mascots/snappy-original-192.webp 192w"
-          sizes="24px"
-          width="24"
-          height="24"
+        <Image
+          src={snappyOriginal}
           alt=""
+          width={24}
+          height={24}
+          densities={[1, 2, 3]}
+          format="webp"
           class="block h-6 w-6 object-contain"
         />
         <span class="text-[13px] font-semibold tracking-tight text-text-primary">Torchsnap</span>

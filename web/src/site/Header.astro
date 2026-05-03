@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
 
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
@@ -28,13 +30,13 @@ const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
     ]}
   >
     <a href="/" class="inline-flex items-center gap-2">
-      <img
-        src="/mascots/snappy-original-192.webp"
-        srcset="/mascots/snappy-original-96.webp 96w, /mascots/snappy-original-192.webp 192w, /mascots/snappy-original-384.webp 384w"
-        sizes="32px"
-        width="32"
-        height="32"
+      <Image
+        src={snappyOriginal}
         alt=""
+        width={32}
+        height={32}
+        densities={[1, 2, 3]}
+        format="webp"
         class="block h-8 w-8 object-contain"
       />
       <span class="text-base font-semibold tracking-tight text-text-primary">Torchsnap</span>
