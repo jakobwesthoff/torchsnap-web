@@ -66,10 +66,10 @@ body {
 
 /* Anchor-link behaviour:
  *   - smooth scroll for in-page section nav (`#cast`, `#features`, …)
- *   - top padding equal to the sticky header's *scrolled* height
- *     (py-3 + h-8 logo = 56px = 3.5rem). After any scroll the header
- *     is in this state, so the section's top border lands exactly on
- *     the header's bottom border with no overlap and no gap.
+ *   - top padding equal to the sticky header's height (py-3 + h-8
+ *     logo = 56px = 3.5rem) so the section's top border lands
+ *     exactly on the header's bottom border with no overlap and no
+ *     gap.
  */
 html {
   scroll-behavior: smooth;

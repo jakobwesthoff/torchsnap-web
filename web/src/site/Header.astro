@@ -29,12 +29,15 @@ const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
   ]}
   data-site-header
 >
-  <div
-    class:list={[
-      "section-inner flex items-center justify-between gap-4 py-5 transition-[padding] duration-200 ease-out",
-      "group-data-scrolled:py-3",
-    ]}
-  >
+  {/* Inner row keeps a constant height across scroll states. The
+      sticky element used to collapse from py-5 to py-3 once scrolled
+      past the threshold, but a sticky element changing its own size
+      while the user scrolls is exactly what Firefox flags as a
+      "scroll-linked positioning effect" (jittery on async scroll,
+      thrashes scroll-anchoring). Visual feedback that the page has
+      scrolled now lives entirely in the outer header's bg / blur /
+      border / shadow change. */}
+  <div class="section-inner flex items-center justify-between gap-4 py-3">
     <a href="/" class="inline-flex items-center gap-2">
       <Image
         src={snappyOriginal}
