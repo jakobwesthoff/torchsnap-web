@@ -72,25 +72,10 @@ const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
       aria-controls="mobile-nav"
       data-mobile-nav-toggle
     >
-      {/* Hamburger when collapsed, X when expanded — CSS-only swap
+      {/* Hamburger when collapsed, X when expanded. CSS-only swap
           via aria-expanded on the wrapping `group`. */}
-      <svg
-        class="h-5 w-5 group-aria-expanded:hidden"
-        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
-      >
-        <line x1="4" y1="7" x2="20" y2="7" />
-        <line x1="4" y1="12" x2="20" y2="12" />
-        <line x1="4" y1="17" x2="20" y2="17" />
-      </svg>
-      <svg
-        class="hidden h-5 w-5 group-aria-expanded:block"
-        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
-      >
-        <line x1="6" y1="6" x2="18" y2="18" />
-        <line x1="18" y1="6" x2="6" y2="18" />
-      </svg>
+      <Icon name="heroicons:bars-3" class="h-5 w-5 group-aria-expanded:hidden" />
+      <Icon name="heroicons:x-mark" class="hidden h-5 w-5 group-aria-expanded:block" />
     </button>
   </div>
 
