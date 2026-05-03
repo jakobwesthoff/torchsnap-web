@@ -8,12 +8,19 @@ import {
 } from "./preference";
 
 export function useTheme() {
-  // The pre-paint inline script in the layout has already applied the
-  // correct theme; mirror that state into React without a re-apply on
-  // mount to avoid a redundant DOM write.
-  const [preference, setPreferenceState] = useState<ThemePreference>(() =>
-    typeof window === "undefined" ? "system" : readPreference(),
-  );
+  // SSR has no access to localStorage, so the server always renders the
+  // "system" default. To avoid a hydration mismatch (and the resulting
+  // "this won't be patched up" event handler loss that breaks the
+  // toggle on mobile) we mirror that on the client's first render and
+  // sync the real preference in a mount effect. The pre-paint inline
+  // script in the layout has already applied the correct *visual*
+  // theme, so the only flash is the active-pill position inside the
+  // toggle itself.
+  const [preference, setPreferenceState] = useState<ThemePreference>("system");
+
+  useEffect(() => {
+    setPreferenceState(readPreference());
+  }, []);
 
   // When the preference is "system", react to OS-level changes live.
   useEffect(() => {

@@ -1,0 +1,68 @@
+---
+// One polaroid card from the mascot cast. Rendered both in the desktop
+// grid (rotated, hover-straightens) and inside the mobile carousel
+// (no rotation by default — the caller can opt in via `tilt`).
+//
+// The silhouette branch is what powers the werewolf's "mystery" look:
+// a darker night gradient, the mascot drawn as a flat black silhouette
+// at half opacity, and a small moon dot in the corner.
+
+import { Image } from "astro:assets";
+import { type CastEntry, MASCOTS, TINTS } from "./cast.ts";
+
+interface Props {
+  entry: CastEntry;
+  // Apply the per-card `rot` rotation. Off by default so the carousel
+  // doesn't tilt cards while they swipe.
+  tilt?: boolean;
+}
+
+const { entry, tilt = false } = Astro.props;
+---
+
+<article
+  class:list={[
+    "group relative mx-auto w-full max-w-[320px] transition-[rotate,scale] duration-200 ease-out",
+    tilt && "hover:rotate-0 hover:scale-[1.03] sm:mx-0 sm:max-w-none sm:rotate-[var(--rot)]",
+  ]}
+  style={tilt ? `--rot: ${entry.rot}deg;` : undefined}
+>
+  <div
+    class:list={[
+      "relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-dashed sm:aspect-auto sm:h-44",
+      entry.silhouette
+        ? "border-text-muted/30 bg-transparent dark:border-white/15 dark:bg-[linear-gradient(180deg,oklch(0.25_0.07_265)_0%,oklch(0.18_0.08_265)_100%)]"
+        : "border-accent/35",
+    ]}
+    style={entry.silhouette
+      ? undefined
+      : `background: radial-gradient(circle at 50% 60%, hsl(${TINTS[entry.id]} 80% 60% / 0.32), transparent 70%), var(--color-surface-inset);`}
+  >
+    {entry.silhouette && (
+      <span
+        aria-hidden="true"
+        class="absolute top-4 right-5 h-5 w-5 rounded-full bg-yellow-100/85 shadow-[0_0_18px_rgb(255_255_220/0.55)]"
+      ></span>
+    )}
+    <Image
+      src={MASCOTS[entry.id]}
+      alt=""
+      width={180}
+      height={180}
+      densities={[1, 2, 3]}
+      format="webp"
+      class:list={[
+        "max-h-[92%] max-w-[92%] object-contain drop-shadow-[0_6px_12px_rgb(0_0_0/0.18)]",
+        entry.silhouette && "opacity-50 [filter:brightness(0)]",
+      ]}
+    />
+  </div>
+
+  <div class="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+    {entry.role}
+  </div>
+  <h3 class="text-xl font-semibold leading-tight tracking-tight">{entry.name}</h3>
+  <p class="mt-2.5 text-pretty text-sm leading-[1.5] text-text-secondary">
+    {entry.body}
+  </p>
+</article>
