@@ -4,9 +4,10 @@ import PlatformPill from "./PlatformPill.astro";
 import HeroLauncher from "./HeroLauncher.astro";
 ---
 
-<section id="download" class="grid flex-1 content-center gap-12 px-6 pt-12 pb-12 lg:grid-cols-2 lg:gap-16 lg:px-16 lg:pb-16">
-  {/* LEFT — copy */}
-  <div class="max-w-xl">
+<section id="download" class="flex flex-1 flex-col">
+  <div class="section-inner grid w-full flex-1 content-center gap-12 pt-12 pb-12 lg:grid-cols-2 lg:gap-16 lg:pb-16">
+    {/* LEFT — copy */}
+    <div class="max-w-xl">
     <p class="mb-5 text-sm font-bold uppercase tracking-[0.18em] text-accent">
       Light · Find · Launch
     </p>
@@ -56,6 +57,7 @@ import HeroLauncher from "./HeroLauncher.astro";
     </div>
   </div>
 
-  {/* RIGHT — launcher card with mascot perched on top. */}
-  <HeroLauncher />
+    {/* RIGHT — launcher card with mascot perched on top. */}
+    <HeroLauncher />
+  </div>
 </section>

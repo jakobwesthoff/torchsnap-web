@@ -39,7 +39,11 @@ const { title = "Torchsnap", description = "Keyboard-first launcher for the apps
   </head>
   <body class="flex min-h-svh flex-col bg-surface text-text-primary font-sans antialiased">
     <Header />
-    <main class="mx-auto w-full max-w-[1280px] flex-1"><slot /></main>
+    {/* Sections inside main own their own backgrounds (full-bleed)
+        and constrain their content + border with an inner
+        mx-auto max-w-[1280px] wrapper. Same pattern Header / Footer
+        already use. */}
+    <main class="flex w-full flex-1 flex-col"><slot /></main>
     <Footer />
   </body>
 </html>
