@@ -8,6 +8,8 @@ Accepted
 
 Refined by [3. Port simplified launcher UI from torchsnap](0003-port-simplified-launcher-ui-from-torchsnap.md)
 
+Refined by [5. Website is independent of torchsnap; reused code is copied](0005-website-is-independent-of-torchsnap-reused-code-is-copied.md)
+
 ## Context
 
 The site is a marketing/landing page for Torchsnap (`../torchsnap`).
@@ -30,9 +32,10 @@ islands for the interactive pieces, and Tailwind v4 for styling.
   as `.astro` components and rendered to HTML at build time.
 - Interactive pieces (animated launcher demo, mascot cycler) are
   React components hydrated as Astro islands.
-- Tailwind v4 imports `../torchsnap/packages/plugin-sdk/theme.css`
-  directly so utility classes resolve to the same token values as the
-  app.
+- Tailwind v4 resolves utility classes against the same `@theme`
+  tokens used by the Torchsnap app. The token file is copied into
+  this repository (see ADR-0005), not imported across project
+  boundaries.
 - Output is a fully static bundle.
 
 ## Consequences

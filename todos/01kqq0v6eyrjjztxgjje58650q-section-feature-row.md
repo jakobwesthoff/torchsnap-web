@@ -14,8 +14,9 @@ icon, a title, and a short body. Items from the design:
   data-driven card rendering.
 - A `FeatureCard.astro` component (or inline) for the icon tile +
   title + body.
-- Heroicons (`bolt`, `puzzle-piece`, `computer-desktop`,
-  `code-bracket`) inlined as SVG.
+- Icons via `astro-icon` with `@iconify-json/heroicons` (the
+  project-wide convention for static glyphs — `@heroicons/react`
+  is reserved for use inside React islands).
 - Responsive: 4 columns at `lg`+, 2 columns at `md`, 1 column at
   `sm`. Top border on the section per the design.
 
