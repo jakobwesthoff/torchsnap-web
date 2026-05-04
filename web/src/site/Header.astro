@@ -87,35 +87,48 @@ const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
     </button>
   </div>
 
-  <nav
-    id="mobile-nav"
-    class="hidden border-t border-border-divider bg-surface md:hidden"
-    aria-label="Primary mobile"
-  >
-    <ul class="section-inner flex flex-col gap-1 py-3">
-      {NAV_LINKS.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class="block rounded-md px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+  </header>
+
+{/* Mobile nav panel — rendered as a SIBLING of <header>, not a
+    child. Once the scrolled header gets `backdrop-filter:
+    blur(...)`, it becomes a "backdrop root": any descendant's
+    own backdrop-filter samples from the parent's already-
+    rendered output instead of the actual page content,
+    silently losing its glass effect. Lifting the panel out of
+    the header DOM keeps its backdrop-filter independent so the
+    blur survives in every header state.
+
+    `fixed` at `top-14` (the header's 56 px height) so the
+    panel sits flush below the header and stays in place while
+    the page scrolls underneath. */}
+<nav
+  id="mobile-nav"
+  class="fixed inset-x-0 top-14 z-30 hidden border-b border-border-divider bg-surface/80 backdrop-blur-md shadow-[0_2px_4px_rgb(0_0_0/0.05)] md:hidden"
+  aria-label="Primary mobile"
+>
+  <ul class="section-inner flex flex-col gap-1 py-3">
+    {NAV_LINKS.map((link) => (
       <li>
         <a
-          href={GITHUB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={link.href}
           class="block rounded-md px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary"
         >
-          GitHub
+          {link.label}
         </a>
       </li>
-    </ul>
-  </nav>
-</header>
+    ))}
+    <li>
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block rounded-md px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+      >
+        GitHub
+      </a>
+    </li>
+  </ul>
+</nav>
 
 <script>
   // Sticky header state: add `data-scrolled` once the user has
