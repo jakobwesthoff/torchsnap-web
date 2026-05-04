@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "build:favicon": "bun run tools/build-favicon.ts",
-    "build:og": "bun run tools/build-og.tsx"
+    "build:og": "bun run tools/build-og.tsx",
+    "trim:image": "bun run tools/trim-image.ts"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.4",
