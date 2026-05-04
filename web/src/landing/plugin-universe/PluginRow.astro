@@ -1,0 +1,100 @@
+---
+// One alternating row of the featured-plugin trio.
+//
+// At md+ the row is a 2-column grid: odd indices put the
+// screenshot on the left and the copy on the right; even
+// indices flip the sides. Side placement is done via explicit
+// grid-column starts on each child rather than DOM order or
+// Tailwind `order-*` utilities, both of which proved brittle.
+//
+// On mobile the row collapses to a single column. DOM order
+// is copy → screenshot, matching the rest of the page (Hero,
+// FeatureRow, MascotTheater all lead with prose on mobile and
+// land the visual underneath as a payoff). The tilt is also
+// stripped at narrow widths because a tilted card edge that
+// runs past the screen edge reads as broken rather than playful.
+
+import { Icon } from "astro-icon/components";
+import PluginScreenshot from "./PluginScreenshot.astro";
+import type { FeaturedPlugin } from "./plugins";
+
+interface Props {
+  plugin: FeaturedPlugin;
+  /** 1-based index. Odd → screenshot left; even → screenshot right. */
+  index: number;
+}
+
+const { plugin, index } = Astro.props;
+const screenshotFirst = index % 2 === 1;
+---
+
+<article
+  class:list={[
+    "grid items-center gap-10 lg:gap-20",
+    "md:grid-cols-2",
+  ]}
+>
+  {/* Copy column. The `max-w-[520px]` cap only kicks in once
+      we hit the desktop two-column layout — on mobile the
+      copy fills the available section width naturally rather
+      than leaving an awkward empty rag on the right at
+      tablet-portrait widths. */}
+  <div
+    class:list={[
+      "md:max-w-[520px]",
+      "md:row-start-1",
+      screenshotFirst ? "md:col-start-2" : "md:col-start-1",
+    ]}
+  >
+    {/* Top meta row: just the Bundled pill. The trigger keycap
+        and `torchsnap-<id>` slug used to live here too but
+        cluttered the row's lead-in; the trigger is shown
+        organically inside the body copy ("`:`", "`!`", "`=`")
+        and the slug isn't doing marketing work. */}
+    <div class="mb-5 flex flex-wrap items-center gap-2.5">
+      <span
+        class="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-accent"
+      >
+        <Icon name={plugin.icon} class="h-3.5 w-3.5" />
+        {plugin.badge}
+      </span>
+    </div>
+
+    <h3
+      class="text-balance text-2xl font-semibold leading-[1.15] tracking-tight md:text-[28px] lg:text-[32px]"
+    >
+      {plugin.name}.{" "}
+      <span class="text-text-secondary">{plugin.hook}</span>
+    </h3>
+
+    <p
+      class="mt-4 text-pretty text-base leading-relaxed text-text-secondary"
+    >
+      {plugin.body}
+    </p>
+  </div>
+
+  {/* Screenshot. On desktop, explicitly placed in the column
+      that matches the row's parity. On mobile the row
+      collapses to a stack and the screenshot lands underneath
+      the copy as the visual payoff. */}
+  <div
+    class:list={[
+      "md:row-start-1",
+      screenshotFirst ? "md:col-start-1" : "md:col-start-2",
+    ]}
+  >
+    {/* Strip the tilt below the desktop breakpoint — a tilted
+        card at narrow widths reads as broken rather than
+        playful. The screenshot component tags its tilted root
+        with `data-tilt-target` so we can flatten only that
+        element without poking at internals. */}
+    <div class="[&_[data-tilt-target]]:max-md:!rotate-0">
+      <PluginScreenshot
+        tilt={plugin.tilt}
+        image={plugin.screenshot}
+        alt={plugin.alt}
+      />
+    </div>
+  </div>
+</article>

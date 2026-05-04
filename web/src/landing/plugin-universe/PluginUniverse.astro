@@ -1,0 +1,80 @@
+---
+// "The plugin universe" section.
+//
+// Composition only — the four moving parts (rows, built-in
+// rail, closing beat) live in their own files. The order
+// here is also the visual reading order:
+//
+//   1. Section head — eyebrow + two-line hed + sub-paragraph
+//   2. Three alternating rows of featured plugins
+//   3. Built-in rail — the rest of the bundled set
+//   4. Closing beat — the open-ecosystem pitch
+
+import PluginRow from "./PluginRow.astro";
+import BuiltInRail from "./BuiltInRail.astro";
+import EcosystemBeat from "./EcosystemBeat.astro";
+import { FEATURED } from "./plugins";
+---
+
+<section
+  id="plugins"
+  class="relative overflow-hidden border-t border-border-divider bg-surface"
+>
+  {/* Wide, faint accent glow behind the section head. Mirrors
+      the MascotTheater treatment so #plugins reads as the next
+      named act on the page. */}
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px]"
+    style="background:
+      radial-gradient(ellipse 900px 360px at 50% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 70%);"
+  ></div>
+
+  <div class="section-inner pt-14 pb-24 lg:pb-32">
+    {/* Section head */}
+    <div class="mb-16 max-w-[820px] lg:mb-24">
+      <p class="eyebrow mb-3">The plugin universe</p>
+      <h2
+        class="text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl lg:text-[56px]"
+      >
+        Plug in
+        <span class="font-medium italic text-accent">anything.</span>
+        <br />
+        Trust it like a built-in.
+      </h2>
+      <p
+        class="mt-5 max-w-[640px] text-pretty text-base leading-relaxed text-text-secondary md:text-lg"
+      >
+        The hotkey is for more than apps. Plugins turn it into the
+        place small jobs happen: the emoji, the lookup, the bit of
+        math, none of it breaking the thing you were actually
+        doing.
+      </p>
+    </div>
+
+    {/* Featured trio. Rows alternate sides via the `index`
+        prop; the row component itself is responsible for the
+        side-flip and the mobile collapse.
+
+        Mobile gets the largest gap of the three breakpoints:
+        each row collapses to a centred screenshot+copy stack,
+        and a generous separator is the only thing keeping
+        adjacent plugins from running into each other visually. */}
+    <div class="flex flex-col gap-32 md:gap-28 lg:gap-40">
+      {FEATURED.map((plugin, i) => (
+        <PluginRow plugin={plugin} index={i + 1} />
+      ))}
+    </div>
+
+    {/* Built-in rail — visually a quieter beat than the trio,
+        separated by a generous gap. */}
+    <div class="mt-24 lg:mt-32">
+      <BuiltInRail />
+    </div>
+
+    {/* Closing beat — the open-ecosystem pitch. */}
+    <div class="mt-16 lg:mt-24">
+      <EcosystemBeat />
+    </div>
+  </div>
+</section>

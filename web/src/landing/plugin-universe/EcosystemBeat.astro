@@ -1,0 +1,124 @@
+---
+// Closing beat for the plugin universe section.
+//
+// Three claims, in order of importance:
+//   1. WebAssembly core — anyone can build a plugin.
+//   2. Optional React/TSX frontends.
+//   3. We eat our own dog food: most bundled plugins are
+//      built on the same system third-party plugins use.
+//
+// Each pillar is anchored by a brand glyph rather than an
+// abstract heroicon: the WebAssembly mark (`simple-icons:
+// webassembly`) and the React mark (`simple-icons:react`)
+// from the simple-icons iconify set, plus a tiny inline
+// Snappy for the eat-our-own claim. The marks are coloured
+// in their respective brands so the visual immediately reads
+// "WASM and React are the technologies, Snappy is us."
+//
+// A dedicated developer guide lives elsewhere; this section
+// only mentions it in a single trailing line.
+
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import snappyOriginal from "../../assets/mascots/snappy-original-1024.png";
+---
+
+<div class="rounded-[20px] border border-border bg-surface-inset p-8 md:p-12">
+  <div class="grid gap-10 md:grid-cols-[1.1fr_1fr] md:items-start md:gap-16">
+    <div class="max-w-[520px]">
+      <p class="eyebrow mb-3">Open ecosystem</p>
+      <h3
+        class="text-balance text-3xl font-semibold leading-[1.1] tracking-tight md:text-4xl"
+      >
+        Plugins all the way down.
+      </h3>
+      <p
+        class="mt-4 text-pretty text-base leading-relaxed text-text-secondary"
+      >
+        Torchsnap is a small launcher with a plugin system. Not a
+        big launcher with a few extension points bolted on. The
+        bundled plugins are written the way you'd write your own,
+        and there's nothing a third-party plugin can't reach for
+        that a built-in one can.
+      </p>
+
+      <p class="mt-6 text-sm text-text-muted">
+        A dedicated SDK guide lands alongside the public beta. For
+        now: peek at the bundled plugins in the source repo to see
+        the shape of things.
+      </p>
+    </div>
+
+    <ul class="flex flex-col gap-7">
+      {/* WebAssembly — brand purple, square mark with WA glyph.
+          The glyph carries enough recognition on its own; no
+          frame around it. */}
+      <li class="flex items-center gap-5">
+        <Icon
+          name="simple-icons:webassembly"
+          class="h-10 w-10 shrink-0"
+          style="color: #654FF0;"
+          aria-label="WebAssembly"
+        />
+        <div class="min-w-0">
+          <div class="text-base font-semibold text-text-primary">
+            WebAssembly core
+          </div>
+          <p class="mt-1 text-sm leading-relaxed text-text-secondary">
+            Any language that compiles to wasm32-wasip2 works as a
+            plugin: Rust, Go, JavaScript, Zig. Each runs in its own
+            sandbox, isolated from the host and from every other
+            plugin.
+          </p>
+        </div>
+      </li>
+
+      {/* React — brand cyan, atom mark. Same dimensions as the
+          WASM mark so the column reads as a coherent triplet. */}
+      <li class="flex items-center gap-5">
+        <Icon
+          name="simple-icons:react"
+          class="h-10 w-10 shrink-0"
+          style="color: #61DAFB;"
+          aria-label="React"
+        />
+        <div class="min-w-0">
+          <div class="text-base font-semibold text-text-primary">
+            Optional React frontends
+          </div>
+          <p class="mt-1 text-sm leading-relaxed text-text-secondary">
+            When a plugin needs more than the standard result list,
+            it can ship its own React/TSX surface: settings panels,
+            custom launcher views, inline strips above the results.
+          </p>
+        </div>
+      </li>
+
+      {/* Snappy — the dog-food beat. The mascot itself is the
+          icon: small, sized to match the brand glyphs above so
+          the row keeps its rhythm. */}
+      <li class="flex items-center gap-5">
+        <Image
+          src={snappyOriginal}
+          alt=""
+          width={56}
+          height={56}
+          densities={[1, 2, 3]}
+          format="webp"
+          loading="lazy"
+          class="h-10 w-10 shrink-0 select-none object-contain"
+        />
+        <div class="min-w-0">
+          <div class="text-base font-semibold text-text-primary">
+            What we eat ourselves
+          </div>
+          <p class="mt-1 text-sm leading-relaxed text-text-secondary">
+            Most of Torchsnap's own bundled plugins are written the
+            same way you'd write one. No side door, no shortcut,
+            just the same way in for everyone.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
