@@ -15,7 +15,7 @@ import type { ImageMetadata } from "astro";
 
 interface Props {
   tilt: "left" | "right";
-  image: ImageMetadata;
+  image: { light: ImageMetadata; dark: ImageMetadata };
   alt: string;
 }
 
@@ -61,12 +61,20 @@ const tiltClass = tilt === "left" ? "-rotate-[3deg]" : "rotate-[3deg]";
     ]}
   >
     <Image
-      src={image}
+      src={image.light}
       alt={alt}
       densities={[1, 2]}
       format="webp"
       loading="lazy"
-      class="block h-auto w-full select-none"
+      class="block h-auto w-full select-none dark:hidden"
+    />
+    <Image
+      src={image.dark}
+      alt={alt}
+      densities={[1, 2]}
+      format="webp"
+      loading="lazy"
+      class="hidden h-auto w-full select-none dark:block"
     />
   </div>
 </div>

@@ -11,9 +11,12 @@
 // chrome of the three.
 
 import type { ImageMetadata } from "astro";
-import emojiPickerScreenshot from "../../assets/plugins/emoji-picker.png";
-import bangsScreenshot from "../../assets/plugins/bangs.png";
-import calculatorScreenshot from "../../assets/plugins/calculator.png";
+import emojiPickerScreenshotLight from "../../assets/plugins/light/emoji-picker.png";
+import emojiPickerScreenshotDark from "../../assets/plugins/dark/emoji-picker.png";
+import bangsScreenshotLight from "../../assets/plugins/light/bangs.png";
+import bangsScreenshotDark from "../../assets/plugins/dark/bangs.png";
+import calculatorScreenshotLight from "../../assets/plugins/light/calculator.png";
+import calculatorScreenshotDark from "../../assets/plugins/dark/calculator.png";
 
 export interface FeaturedPlugin {
   /** Display name on the row, also used in the heading. */
@@ -28,8 +31,8 @@ export interface FeaturedPlugin {
   icon: string;
   /** Tilt direction for the screenshot. Alternated row-by-row. */
   tilt: "left" | "right";
-  /** Captured launcher screenshot for this plugin. */
-  screenshot: ImageMetadata;
+  /** Captured launcher screenshot for this plugin, one variant per theme. */
+  screenshot: { light: ImageMetadata; dark: ImageMetadata };
   /** Alt text describing what the screenshot actually shows. Each
    *  capture is different enough that a generic "launcher with X
    *  plugin active" template would lose accessibility value. */
@@ -42,10 +45,10 @@ export const FEATURED: FeaturedPlugin[] = [
     badge: "Bundled",
     hook: "An emoji picker that keeps up with the keyboard.",
     body:
-      "Two letters of what you meant, copy, back to typing. No hunt. No menu. No break in the sentence you were already writing.",
+      "The emoji your sentence is missing, two letters away. No menu hunt. No app switch. No break in the writing.",
     icon: "heroicons:face-smile",
     tilt: "left",
-    screenshot: emojiPickerScreenshot,
+    screenshot: { light: emojiPickerScreenshotLight, dark: emojiPickerScreenshotDark },
     alt: "Torchsnap launcher in emoji-picker mode: the search field reads ':part', a grid of emojis fills the body, and the footer labels the selected glyph as 'partying_face — partying face'.",
   },
   {
@@ -53,10 +56,10 @@ export const FEATURED: FeaturedPlugin[] = [
     badge: "Bundled",
     hook: "A calculator that doesn't need its own window.",
     body:
-      "Type the math, the answer's already there. Trig, exponents, parentheses, whatever the moment asks for. The numbers you crunched yesterday are still one keystroke away today.",
+      "Mid-thought, you need a number. Type the expression, the answer's already underneath it. The same expression, tomorrow morning, still one keystroke away.",
     icon: "heroicons:calculator",
     tilt: "right",
-    screenshot: calculatorScreenshot,
+    screenshot: { light: calculatorScreenshotLight, dark: calculatorScreenshotDark },
     alt: "Torchsnap launcher with the expression '2^32 - 1' typed; the calculator's inline row shows the result 4294967295 above the standard footer.",
   },
   {
@@ -64,10 +67,10 @@ export const FEATURED: FeaturedPlugin[] = [
     badge: "Bundled",
     hook: "Search the web without first opening the web.",
     body:
-      "`!gh torchsnap`. `keyboard !wiki`. `!yt synth wave`. Every DuckDuckGo bang you know, three keystrokes away from a real search. At the start, the end, wherever it falls out of your fingers. The browser opens already on the answer page.",
+      "`!gh torchsnap`. `keyboard !wiki`. `!yt synth wave`. Every DuckDuckGo bang, recognized at the start, the end, wherever it falls out of your fingers. The browser skips the search engine entirely and opens on the answer page.",
     icon: "heroicons:arrow-top-right-on-square",
     tilt: "left",
-    screenshot: bangsScreenshot,
+    screenshot: { light: bangsScreenshotLight, dark: bangsScreenshotDark },
     alt: "Torchsnap launcher with 'pantine !crates' typed; the top result opens 'pantine' in the Rust community's crate host, with several System Settings results listed below.",
   },
 ];
