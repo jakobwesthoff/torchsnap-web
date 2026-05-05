@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
@@ -14,7 +13,6 @@ export default defineConfig({
   site: "https://torchsnap.app",
 
   integrations: [
-    react(),
     icon(),
     // Generates sitemap-index.xml + sitemap-0.xml at build time from
     // the routes under src/pages/. The /impressum page is excluded

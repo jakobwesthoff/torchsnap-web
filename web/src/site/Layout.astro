@@ -77,6 +77,10 @@ const ogImage = new URL("/og.png", origin).toString();
       // value mirrors the API in src/theme/preference.ts:
       //   "light" / "dark"  → forced
       //   missing / "system" → follow prefers-color-scheme
+      //
+      // We also stamp the preference itself onto <html> so the theme
+      // toggle in the footer can render the active pill at the right
+      // offset on first paint without a client-side reflow.
       (() => {
         const stored = localStorage.getItem("theme");
         const preference =
@@ -88,6 +92,7 @@ const ogImage = new URL("/og.png", origin).toString();
               : "light"
             : preference;
         if (resolved === "dark") document.documentElement.dataset.theme = "dark";
+        document.documentElement.dataset.themePreference = preference;
       })();
     </script>
   </head>

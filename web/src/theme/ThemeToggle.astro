@@ -1,0 +1,75 @@
+---
+import { Icon } from "astro-icon/components";
+import { cn } from "../design-system/cn";
+
+// Same three options the React version exposed, in the visual order
+// they appear (System → Light → Dark). The vanilla TS handler reads
+// `data-value` to identify which option a button represents and
+// derives the pill offset from the button's index.
+const OPTIONS = [
+  { value: "system", icon: "heroicons:computer-desktop", label: "System" },
+  { value: "light", icon: "heroicons:sun", label: "Light" },
+  { value: "dark", icon: "heroicons:moon", label: "Dark" },
+] as const;
+---
+
+<div
+  class="theme-toggle relative flex items-center rounded-full bg-surface-inset p-1"
+  role="radiogroup"
+  aria-label="Theme"
+>
+  {/* Pill position is driven entirely by CSS rules below, keyed off
+      `data-theme-preference` on <html>. The Layout pre-paint script
+      stamps that attribute before first paint, so the active option
+      is highlighted from frame 1 with no client-side reflow. */}
+  <div
+    class="theme-toggle-pill absolute rounded-full bg-surface shadow-sm transition-transform duration-200 ease-out"
+    style="width: 28px; height: 28px;"
+  ></div>
+
+  {
+    OPTIONS.map(({ value, icon, label }) => (
+      <button
+        type="button"
+        role="radio"
+        data-value={value}
+        aria-label={label}
+        aria-checked="false"
+        class={cn(
+          "theme-toggle-option relative z-10 cursor-pointer rounded-full p-1.5 transition-colors",
+          "text-text-muted hover:text-text-secondary",
+        )}
+      >
+        <Icon name={icon} class="h-4 w-4" />
+      </button>
+    ))
+  }
+</div>
+
+<style is:global>
+  /* Pill position by preference. The order matches OPTIONS above:
+     system = column 0, light = column 1, dark = column 2.
+     Each column is 28px (matches the pill's width). */
+  html[data-theme-preference="system"] .theme-toggle-pill {
+    transform: translateX(0);
+  }
+  html[data-theme-preference="light"] .theme-toggle-pill {
+    transform: translateX(28px);
+  }
+  html[data-theme-preference="dark"] .theme-toggle-pill {
+    transform: translateX(56px);
+  }
+
+  /* Active option's icon adopts the primary text color. Inactive
+     options inherit the muted color from the button's class list. */
+  html[data-theme-preference="system"] .theme-toggle-option[data-value="system"],
+  html[data-theme-preference="light"] .theme-toggle-option[data-value="light"],
+  html[data-theme-preference="dark"] .theme-toggle-option[data-value="dark"] {
+    color: var(--color-text-primary);
+  }
+</style>
+
+<script>
+  import { initThemeToggle } from "./toggle.client";
+  initThemeToggle();
+</script>

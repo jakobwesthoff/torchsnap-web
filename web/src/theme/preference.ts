@@ -1,5 +1,5 @@
 // Theme persistence shared by the pre-paint inline init and the
-// React ThemeToggle island.
+// ThemeToggle component's client handler.
 //
 // The user picks one of three preferences (System / Light / Dark).
 // "system" follows `prefers-color-scheme`; "light" / "dark" force

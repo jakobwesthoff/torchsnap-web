@@ -1,5 +1,5 @@
 ---
-import { ThemeToggle } from "../theme/ThemeToggle";
+import ThemeToggle from "../theme/ThemeToggle.astro";
 import { Image } from "astro:assets";
 import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
 
@@ -46,7 +46,7 @@ const year = new Date().getFullYear();
           </a>
         ))}
       </nav>
-      <ThemeToggle client:idle />
+      <ThemeToggle />
     </div>
   </div>
 </footer>
