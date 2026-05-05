@@ -6,6 +6,8 @@ Date: 2026-05-02
 
 Accepted
 
+Superseded by [6. Drop React; render the launcher statically and the theme toggle in vanilla JS](0006-drop-react-render-the-launcher-statically-and-the-theme-toggle-in-vanilla-js.md)
+
 Refined by [3. Build the launcher demo as bespoke marketing UI](0003-build-the-launcher-demo-as-bespoke-marketing-ui.md)
 
 Refined by [5. Website is independent of torchsnap; reused code is copied](0005-website-is-independent-of-torchsnap-reused-code-is-copied.md)
@@ -28,19 +30,19 @@ reuse those tokens so the two never drift visually.
 Build the website with Astro, using React components as client-side
 islands for the interactive pieces, and Tailwind v4 for styling.
 
-- Static chrome (header, hero markup, feature grid, footer) is authored
+* Static chrome (header, hero markup, feature grid, footer) is authored
   as `.astro` components and rendered to HTML at build time.
-- Interactive pieces (animated launcher demo, mascot cycler) are
+* Interactive pieces (animated launcher demo, mascot cycler) are
   React components hydrated as Astro islands.
-- Tailwind v4 resolves utility classes against the same `@theme`
+* Tailwind v4 resolves utility classes against the same `@theme`
   tokens used by the Torchsnap app. The token file is copied into
   this repository (see ADR-0005), not imported across project
   boundaries.
-- Output is a fully static bundle.
+* Output is a fully static bundle.
 
 ## Consequences
 
-- The static majority of the page ships zero JS.
-- Two component flavors coexist (`.astro` for static, `.tsx` for
+* The static majority of the page ships zero JS.
+* Two component flavors coexist (`.astro` for static, `.tsx` for
   islands).
-- Design tokens have a single source of truth shared with the app.
+* Design tokens have a single source of truth shared with the app.
