@@ -1,14 +1,72 @@
 ---
+// Static placeholder for the launcher demo. The visual chrome
+// matches the real launcher's outer shell (`Launcher.tsx` from
+// `../torchsnap/src/launcher/`) so the dynamic island in todo
+// …650s can swap in without a layout shift.
+//
+// Per todo …650r: Inter font features cv11/ss01/ss03 are
+// disabled at the card root so the launcher reads exactly like
+// the real Torchsnap app, not the marketing copy.
+
+import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
-import { DemoLauncher } from "../launcher/DemoLauncher";
+
+// Each title is split into segments; `m: true` marks a fuzzy-match
+// hit and is rendered in the accent color (mirrors the real
+// launcher's highlighting from `lib/highlightText.tsx`).
+type Segment = { t: string; m?: boolean };
+
+interface Result {
+  title: Segment[];
+  subtitle: string;
+  icon: string;
+  selected?: boolean;
+}
+
+const QUERY = "gho";
+
+const RESULTS: Result[] = [
+  {
+    title: [
+      { t: "Gho", m: true },
+      { t: "stty" },
+    ],
+    subtitle: "/Applications/Ghostty.app",
+    icon: "heroicons:command-line",
+    selected: true,
+  },
+  {
+    title: [
+      { t: "Tog" },
+      { t: "g", m: true },
+      { t: "le Dark / Li" },
+      { t: "gh", m: true },
+      { t: "t M" },
+      { t: "o", m: true },
+      { t: "de" },
+    ],
+    subtitle: "Switch system appearance between dark and light",
+    icon: "heroicons:moon",
+  },
+  {
+    title: [
+      { t: "G", m: true },
+      { t: "oogle C" },
+      { t: "h", m: true },
+      { t: "r" },
+      { t: "o", m: true },
+      { t: "me" },
+    ],
+    subtitle: "/Applications/Google Chrome.app",
+    icon: "heroicons:globe-alt",
+  },
+];
 ---
 
 <div class="relative mx-auto mt-[150px] w-full max-w-[520px]">
   {/* Snappy perched on top of the search bar — only the paws dip
-      into the card. The mascot stays in the Astro tree so it can use
-      the build-time webp + density pipeline; the React island below
-      owns the launcher card itself. */}
+      into the card. */}
   <Image
     src={snappyOriginal}
     alt=""
@@ -21,5 +79,59 @@ import { DemoLauncher } from "../launcher/DemoLauncher";
     class="pointer-events-none absolute -top-[138px] left-1/2 z-10 h-[170px] w-[170px] -translate-x-1/2 select-none object-contain"
   />
 
-  <DemoLauncher client:visible />
+  <div
+    class="relative overflow-hidden rounded-2xl bg-surface shadow-[0_0_0_1px_var(--color-border),inset_0_1px_0_0_rgb(255_255_255/0.06),0_4px_16px_rgb(0_0_0/0.12),0_16px_48px_rgb(0_0_0/0.16)]"
+    style="font-feature-settings: normal;"
+  >
+    {/* Search row */}
+    <div class="flex items-center gap-3 px-5 py-4">
+      <Icon name="heroicons:magnifying-glass" class="h-5 w-5 shrink-0 text-accent" />
+      <input
+        type="text"
+        value={QUERY}
+        readonly
+        tabindex="-1"
+        aria-label="Demo search"
+        class="flex-1 bg-transparent text-lg text-text-primary outline-none placeholder:text-text-muted"
+      />
+      <span class="keycap rounded px-2 py-0.5 text-[11px] text-text-secondary">
+        Esc
+      </span>
+    </div>
+
+    <div class="border-t border-border"></div>
+
+    {/* Result rows */}
+    <div>
+      {RESULTS.map((r) => (
+        <div
+          class:list={[
+            "flex items-center gap-3 border-l-2 py-2.5 pl-3 pr-5",
+            r.selected ? "border-accent bg-selection" : "border-transparent",
+          ]}
+        >
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center">
+            <Icon name={r.icon} class="h-7 w-7 text-text-secondary" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="truncate text-sm text-text-primary">
+              {r.title.map((seg) =>
+                seg.m ? <span class="text-accent">{seg.t}</span> : seg.t,
+              )}
+            </div>
+            <div class="truncate text-xs text-text-muted">{r.subtitle}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Footer hint — same surface as the card body, small ↵ key
+        cap, action label to the right. */}
+    <div class="flex items-center gap-2 border-t border-border px-5 py-2.5 text-xs text-text-secondary">
+      <span class="keycap h-5 min-w-[20px] rounded px-1 text-[11px] font-normal text-text-secondary">
+        ↵
+      </span>
+      <span>Open</span>
+    </div>
+  </div>
 </div>
