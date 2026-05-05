@@ -6,7 +6,7 @@ Date: 2026-05-02
 
 Accepted
 
-Refined by [3. Port simplified launcher UI from torchsnap](0003-port-simplified-launcher-ui-from-torchsnap.md)
+Refined by [3. Build the launcher demo as bespoke marketing UI](0003-build-the-launcher-demo-as-bespoke-marketing-ui.md)
 
 Refined by [5. Website is independent of torchsnap; reused code is copied](0005-website-is-independent-of-torchsnap-reused-code-is-copied.md)
 
