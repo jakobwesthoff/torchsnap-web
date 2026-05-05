@@ -1,34 +1,32 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 import { cn } from "../design-system/cn";
-import { SNAPSHOT_GHO } from "./snapshots";
-import type { DemoResult, DemoSnapshot, Segment } from "./types";
+import { runScenarioMatch } from "./match";
+import { useScriptedDemo } from "./useScriptedDemo";
+import type { DemoResult, Segment } from "./types";
 
-interface DemoLauncherProps {
-  snapshot?: DemoSnapshot;
-}
+export function DemoLauncher() {
+  const { input, scenario } = useScriptedDemo();
+  const results = runScenarioMatch(input, scenario.recognizer);
 
-export function DemoLauncher({ snapshot = SNAPSHOT_GHO }: DemoLauncherProps) {
   return (
     <div
       className="relative overflow-hidden rounded-2xl bg-surface shadow-[0_0_0_1px_var(--color-border),inset_0_1px_0_0_rgb(255_255_255/0.06),0_4px_16px_rgb(0_0_0/0.12),0_16px_48px_rgb(0_0_0/0.16)]"
       style={{ fontFeatureSettings: "normal" }}
     >
-      <SearchRow query={snapshot.query} />
+      <SearchRow query={input} />
 
-      <div className="border-t border-border" />
-
-      <div>
-        {snapshot.results.map((result, i) => (
-          <ResultRow
-            key={i}
-            result={result}
-            selected={i === snapshot.selectedIndex}
-          />
-        ))}
-      </div>
-
-      <FooterHint />
+      {results.length > 0 && (
+        <>
+          <div className="border-t border-border" />
+          <div>
+            {results.map((result, i) => (
+              <ResultRow key={i} result={result} selected={i === 0} />
+            ))}
+          </div>
+          <FooterHint />
+        </>
+      )}
     </div>
   );
 }
@@ -43,9 +41,9 @@ function SearchRow({ query }: { query: string }) {
         readOnly
         tabIndex={-1}
         aria-label="Demo search"
-        // Controlled input requires `onChange`; the demo never accepts
-        // typed input from the user (the value is driven by the
-        // snapshot prop), so the handler is a no-op.
+        // Controlled input requires `onChange`; the value is driven
+        // externally and the user never types here, so the handler is
+        // a deliberate no-op.
         onChange={() => {}}
         className="flex-1 bg-transparent text-lg text-text-primary outline-none placeholder:text-text-muted"
       />
