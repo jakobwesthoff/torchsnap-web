@@ -1,7 +1,7 @@
 // Single source of truth for the mascot cast: image bindings, per-mascot
 // tint hue, the entry type, and the seven hand-pinned cards rendered by
-// `MascotTheater.astro`. Imported by both `CastCard.astro` (single
-// polaroid) and `CastCarousel.astro` (mobile swipeable strip).
+// `MascotTheater.astro`. Imported by `CastCard.astro` (the single
+// polaroid component used by both desktop grid and mobile carousel).
 
 import original from "../../assets/mascots/snappy-original-1024.png";
 import dino from "../../assets/mascots/snappy-dino-kigurumi-1024.png";

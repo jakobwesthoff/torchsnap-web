@@ -33,9 +33,9 @@ body {
   font-feature-settings: "cv11", "ss01", "ss03";
 }
 
-/* Inner content frame shared by every section (Hero, HotkeyBanner,
- * MascotTheater, FeatureRow, Header, Footer). Pairs with a full-bleed
- * outer <section> that owns the background and divider line.
+/* Inner content frame shared by every section (Hero, HotkeyTagline,
+ * MascotTheater, Gadgets, Convictions, Header, Footer). Pairs with a
+ * full-bleed outer <section> that owns the background and divider line.
  *
  * The outer section spans the viewport; this utility centres the
  * content, caps it at 1280px, and applies the standard horizontal

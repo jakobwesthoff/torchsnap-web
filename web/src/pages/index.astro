@@ -1,24 +1,24 @@
 ---
 import Layout from "../site/Layout.astro";
-import Hero from "../landing/Hero.astro";
-import HotkeyBanner from "../landing/HotkeyBanner.astro";
+import Hero from "../landing/hero/Hero.astro";
+import HotkeyTagline from "../landing/HotkeyTagline.astro";
 import MascotTheater from "../landing/mascot-theater/MascotTheater.astro";
-import FeatureRow from "../landing/FeatureRow.astro";
-import PluginUniverse from "../landing/plugin-universe/PluginUniverse.astro";
+import Convictions from "../landing/Convictions.astro";
+import Gadgets from "../landing/gadgets/Gadgets.astro";
 ---
 
 <Layout>
-  {/* Hero + HotkeyBanner together fill at least the first viewport
+  {/* Hero + HotkeyTagline together fill at least the first viewport
       "page" (minus the sticky header). Hero takes any extra space via
-      `flex-1`, vertically centring its content; HotkeyBanner keeps
+      `flex-1`, vertically centring its content; HotkeyTagline keeps
       its natural size and sits flush against the fold so the user
       always sees it as the bottom of the initial screen, with the
       next section discoverable on scroll. */}
   <div class="flex min-h-[calc(100svh-3.5rem)] flex-col">
     <Hero />
-    <HotkeyBanner />
+    <HotkeyTagline />
   </div>
   <MascotTheater />
-  <PluginUniverse />
-  <FeatureRow />
+  <Gadgets />
+  <Convictions />
 </Layout>

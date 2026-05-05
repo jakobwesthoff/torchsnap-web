@@ -1,7 +1,7 @@
-# Plugin showcase screenshots
+# Gadget showcase screenshots
 
-Drop launcher captures here, one per featured plugin in the
-`web/src/landing/plugin-universe/`. Each plugin needs both a
+Drop launcher captures here, one per featured Gadget in
+`web/src/landing/gadgets/`. Each Gadget needs both a
 light- and a dark-theme capture under matching basenames in
 `light/` and `dark/`; the page swaps between them based on
 `data-theme` on `<html>`.
@@ -12,8 +12,8 @@ macOS window-shadow halo or the snappy mascot's empty headroom
 above the launcher pushes the image around in the layout):
 
 ```sh
-bun run trim:image src/assets/plugins/light/calculator.png --in-place
-bun run trim:image src/assets/plugins/dark/calculator.png --in-place
+bun run trim:image src/assets/gadgets/light/calculator.png --in-place
+bun run trim:image src/assets/gadgets/dark/calculator.png --in-place
 ```
 
 Add `--padding 16` if you want to keep a small transparent

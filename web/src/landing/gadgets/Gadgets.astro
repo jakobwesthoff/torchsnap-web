@@ -1,27 +1,27 @@
 ---
-// "The plugin universe" section.
+// "Gadgets" section.
 //
-// Composition only — the four moving parts (rows, built-in
-// rail, closing beat) live in their own files. The order
-// here is also the visual reading order:
+// Composition only — the four moving parts (rows, bundled
+// blurb, ecosystem pillars) live in their own files. The
+// order here is also the visual reading order:
 //
 //   1. Section head — eyebrow + two-line hed + sub-paragraph
-//   2. Three alternating rows of featured plugins
-//   3. Built-in rail — the rest of the bundled set
-//   4. Closing beat — the open-ecosystem pitch
+//   2. Three alternating rows of featured Gadgets
+//   3. Bundled Gadgets — the rest of what ships in the box
+//   4. Ecosystem pillars — the open-ecosystem closer
 
-import PluginRow from "./PluginRow.astro";
-import BuiltInRail from "./BuiltInRail.astro";
-import EcosystemBeat from "./EcosystemBeat.astro";
-import { FEATURED } from "./plugins";
+import GadgetRow from "./GadgetRow.astro";
+import BundledGadgets from "./BundledGadgets.astro";
+import EcosystemPillars from "./EcosystemPillars.astro";
+import { FEATURED } from "./gadgets";
 ---
 
 <section
-  id="plugins"
+  id="gadgets"
   class="relative overflow-hidden border-t border-border-divider bg-surface"
 >
   {/* Wide, faint accent glow behind the section head. Mirrors
-      the MascotTheater treatment so #plugins reads as the next
+      the MascotTheater treatment so #gadgets reads as the next
       named act on the page. */}
   <div
     aria-hidden="true"
@@ -58,22 +58,22 @@ import { FEATURED } from "./plugins";
         Mobile gets the largest gap of the three breakpoints:
         each row collapses to a centred screenshot+copy stack,
         and a generous separator is the only thing keeping
-        adjacent plugins from running into each other visually. */}
+        adjacent Gadgets from running into each other visually. */}
     <div class="flex flex-col gap-32 md:gap-28 lg:gap-40">
-      {FEATURED.map((plugin, i) => (
-        <PluginRow plugin={plugin} index={i + 1} />
+      {FEATURED.map((gadget, i) => (
+        <GadgetRow gadget={gadget} index={i + 1} />
       ))}
     </div>
 
-    {/* Built-in rail — visually a quieter beat than the trio,
-        separated by a generous gap. */}
+    {/* Bundled Gadgets — quieter beat than the trio, separated
+        by a generous gap. */}
     <div class="mt-24 lg:mt-32">
-      <BuiltInRail />
+      <BundledGadgets />
     </div>
 
-    {/* Closing beat — the open-ecosystem pitch. */}
+    {/* Ecosystem pillars — the open-ecosystem closer. */}
     <div class="mt-16 lg:mt-24">
-      <EcosystemBeat />
+      <EcosystemPillars />
     </div>
   </div>
 </section>

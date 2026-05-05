@@ -1,9 +1,9 @@
-// Featured plugin trio for the alternating-row showcase.
+// Featured Gadget trio for the alternating-row showcase.
 //
 // The order is deliberate. The emoji picker leads because its
 // custom React grid replaces the standard result list and is
-// therefore the strongest visual proof that plugins can ship
-// their own frontend. The calculator sits in the middle: its
+// therefore the strongest visual proof that a Gadget can ship
+// its own frontend. The calculator sits in the middle: its
 // capture is the shortest of the three (no result list, just
 // the inline-eval row), so flanking it with the two taller
 // shots avoids a vertical-rhythm dip at either end of the
@@ -11,14 +11,14 @@
 // chrome of the three.
 
 import type { ImageMetadata } from "astro";
-import emojiPickerScreenshotLight from "../../assets/plugins/light/emoji-picker.png";
-import emojiPickerScreenshotDark from "../../assets/plugins/dark/emoji-picker.png";
-import bangsScreenshotLight from "../../assets/plugins/light/bangs.png";
-import bangsScreenshotDark from "../../assets/plugins/dark/bangs.png";
-import calculatorScreenshotLight from "../../assets/plugins/light/calculator.png";
-import calculatorScreenshotDark from "../../assets/plugins/dark/calculator.png";
+import emojiPickerScreenshotLight from "../../assets/gadgets/light/emoji-picker.png";
+import emojiPickerScreenshotDark from "../../assets/gadgets/dark/emoji-picker.png";
+import bangsScreenshotLight from "../../assets/gadgets/light/bangs.png";
+import bangsScreenshotDark from "../../assets/gadgets/dark/bangs.png";
+import calculatorScreenshotLight from "../../assets/gadgets/light/calculator.png";
+import calculatorScreenshotDark from "../../assets/gadgets/dark/calculator.png";
 
-export interface FeaturedPlugin {
+export interface FeaturedGadget {
   /** Display name on the row, also used in the heading. */
   name: string;
   /** Category badge text. "Bundled" for now; future: "Community". */
@@ -31,15 +31,15 @@ export interface FeaturedPlugin {
   icon: string;
   /** Tilt direction for the screenshot. Alternated row-by-row. */
   tilt: "left" | "right";
-  /** Captured launcher screenshot for this plugin, one variant per theme. */
+  /** Captured launcher screenshot for this Gadget, one variant per theme. */
   screenshot: { light: ImageMetadata; dark: ImageMetadata };
   /** Alt text describing what the screenshot actually shows. Each
    *  capture is different enough that a generic "launcher with X
-   *  plugin active" template would lose accessibility value. */
+   *  Gadget active" template would lose accessibility value. */
   alt: string;
 }
 
-export const FEATURED: FeaturedPlugin[] = [
+export const FEATURED: FeaturedGadget[] = [
   {
     name: "Emoji Picker",
     badge: "Bundled",

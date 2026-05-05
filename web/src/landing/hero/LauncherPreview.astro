@@ -1,16 +1,16 @@
 ---
-// Static placeholder for the launcher demo. The visual chrome
-// matches the real launcher's outer shell (`Launcher.tsx` from
-// `../torchsnap/src/launcher/`) so the dynamic island in todo
-// …650s can swap in without a layout shift.
+// Static visual preview of the launcher window: search row, three
+// fuzzy-matched results, footer hint, mascot perched on top. The
+// chrome matches the real launcher's outer shell (`Launcher.tsx`
+// from `../torchsnap/src/launcher/`).
 //
-// Per todo …650r: Inter font features cv11/ss01/ss03 are
-// disabled at the card root so the launcher reads exactly like
-// the real Torchsnap app, not the marketing copy.
+// Inter font features cv11/ss01/ss03 are disabled at the card root
+// so the launcher reads exactly like the real Torchsnap app, not
+// the marketing copy.
 
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-import snappyOriginal from "../assets/mascots/snappy-original-1024.png";
+import snappyOriginal from "../../assets/mascots/snappy-original-1024.png";
 
 // Each title is split into segments; `m: true` marks a fuzzy-match
 // hit and is rendered in the accent color (mirrors the real
