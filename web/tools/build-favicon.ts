@@ -1,90 +1,176 @@
-// Composes the Torchsnap favicon at 128 px:
-//   1. Fills a 128×128 canvas with the orange linear gradient
-//      sampled from the desktop app icon
-//      (src-tauri/icons/app-icon-source.png in upstream).
-//   2. Uses the upstream tray template (snappy-tray-template-2-128px)
-//      as a mask: gradient pixels stay where the source owl is dark,
-//      go fully transparent where it is bright. Edges retain the
-//      template's anti-aliased silhouette via the same luminance →
-//      alpha synthesis used by every other path here.
+// Generates the full Torchsnap favicon set from the 1024 px mascot
+// source (snappy-original-1024.png).
 //
-// Result: a transparent PNG whose only visible pixels form the owl
-// shape, painted with the orange gradient flowing top-to-bottom
-// through it. No bounding rectangle, no rounded square — the owl
-// itself is the mark.
+// Small sizes (32 px tab icon, .ico) use the mascot on a transparent
+// background: trim → square-pad → resize.
 //
-// Output: web/public/favicon-128.png. Larger sizes (180/192/512)
-// remain a separate, future job, planned to use the detailed
-// mascot on the same gradient with a proper rounded-square frame
-// (matching how the desktop and tray icons are produced upstream).
+// Large sizes (180 px apple-touch-icon, 192 px Android/PWA icon) place
+// the mascot on the brand orange gradient. Both iOS and Android apply
+// their own rounded masks at display time, so these are full opaque
+// squares — no pre-applied corner rounding.
+//
+// The script shells out to `oxipng` at the end to losslessly crush
+// every generated PNG.
+//
+// Output (all written to web/public/):
+//   favicon.ico          32×32 ICO (PNG payload)
+//   favicon-32.png       32×32 transparent
+//   apple-touch-icon.png 180×180 gradient background
+//   icon-192.png         192×192 gradient background
 
 import sharp from "sharp";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-// `web/tools/` → `web/` → repo root.
 const WEB_ROOT = resolve(HERE, "..");
-const REPO_ROOT = resolve(WEB_ROOT, "..");
-// Brand-level source asset, shared with anything that may need the
-// same iconography in the future (lives outside the web project).
-const SRC_OWL = resolve(REPO_ROOT, "assets/favicon/owl-source-128.png");
-const OUT = resolve(WEB_ROOT, "public/favicon-128.png");
+const SRC_MASCOT = resolve(
+  WEB_ROOT,
+  "src/assets/mascots/snappy-original-1024.png",
+);
+const PUBLIC = resolve(WEB_ROOT, "public");
 
-const SIZE = 128;
-// Stops chosen to give a visible top-to-bottom shift inside the
-// silhouette at small favicon sizes: a light, warm peach at the top
-// and a deeper red-orange at the bottom. Original desktop-icon
-// source was #f87316 / #da7707 (much narrower contrast).
-const TOP_COLOR = "#ffb060"; // rgb(255,176,96)  — light peach
-const BOT_COLOR = "#e0600a"; // rgb(224,96,10)   — deep red-orange
+// =========================================================
+// Brand gradient
+// =========================================================
 
-// Layer 1: full-canvas linear gradient, no rounded corners — the
-// owl silhouette in layer 2 is the actual visible boundary.
-const gradientSvg = Buffer.from(`
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SIZE} ${SIZE}">
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${TOP_COLOR}"/>
-        <stop offset="1" stop-color="${BOT_COLOR}"/>
-      </linearGradient>
-    </defs>
-    <rect width="${SIZE}" height="${SIZE}" fill="url(#g)"/>
-  </svg>
-`);
+// Stops sampled from the desktop app icon, widened for visibility at
+// small sizes: light warm peach at top, deep red-orange at bottom.
+const TOP_COLOR = "#ffb060";
+const BOT_COLOR = "#e0600a";
 
-// Layer 2: alpha mask synthesised from the source's inverted
-// luminance. Source is RGB-only, drawn as black-on-white. Inverting
-// the red channel (≡ luminance for a grayscale source) gives a
-// single-channel alpha map: 255 inside the silhouette, 0 outside,
-// proportional values along the anti-aliased edge.
-const { data: owlRgb } = await sharp(SRC_OWL)
-  .removeAlpha()
-  .raw()
-  .toBuffer({ resolveWithObject: true });
-
-const maskRgba = Buffer.alloc(SIZE * SIZE * 4);
-for (let i = 0, j = 0; i < owlRgb.length; i += 3, j += 4) {
-  // Mask colour is irrelevant — `dest-in` only consumes the source's
-  // alpha. Leave RGB at zero for cleanliness.
-  maskRgba[j] = 0;
-  maskRgba[j + 1] = 0;
-  maskRgba[j + 2] = 0;
-  maskRgba[j + 3] = 255 - owlRgb[i];
+function gradientSvg(size: number): Buffer {
+  return Buffer.from(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="${TOP_COLOR}"/>
+          <stop offset="1" stop-color="${BOT_COLOR}"/>
+        </linearGradient>
+      </defs>
+      <rect width="${size}" height="${size}" fill="url(#g)"/>
+    </svg>
+  `);
 }
-const owlMask = await sharp(maskRgba, {
-  raw: { width: SIZE, height: SIZE, channels: 4 },
-})
-  .png()
-  .toBuffer();
 
-// `dest-in` keeps the destination (gradient) wherever the source
-// (mask) has alpha. Pixels outside the owl become fully transparent
-// in the output.
-await sharp(gradientSvg)
-  .ensureAlpha()
-  .composite([{ input: owlMask, blend: "dest-in" }])
-  .png({ compressionLevel: 9 })
-  .toFile(OUT);
+// =========================================================
+// Mascot preparation: trim → square-pad
+// =========================================================
 
-console.log(`wrote ${OUT}`);
+async function prepareMascot(): Promise<Buffer> {
+  const trimmedBuf = await sharp(SRC_MASCOT)
+    .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 }, threshold: 0 })
+    .toBuffer();
+
+  const meta = await sharp(trimmedBuf).metadata();
+  const w = meta.width!;
+  const h = meta.height!;
+  const maxDim = Math.max(w, h);
+
+  return sharp(trimmedBuf)
+    .extend({
+      top: Math.floor((maxDim - h) / 2),
+      bottom: Math.ceil((maxDim - h) / 2),
+      left: Math.floor((maxDim - w) / 2),
+      right: Math.ceil((maxDim - w) / 2),
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .toBuffer();
+}
+
+// =========================================================
+// Output generators
+// =========================================================
+
+async function writeTransparent(
+  mascot: Buffer,
+  size: number,
+  outPath: string,
+): Promise<void> {
+  await sharp(mascot)
+    .resize(size, size)
+    .png({ compressionLevel: 9 })
+    .toFile(outPath);
+}
+
+// The mascot is scaled to fill ~75 % of the canvas so it sits
+// comfortably inside both the iOS superellipse mask and Android's
+// adaptive-icon safe zone (~66 % inner circle).
+const MASCOT_FILL = 0.75;
+
+async function writeGradientIcon(
+  mascot: Buffer,
+  size: number,
+  outPath: string,
+): Promise<void> {
+  const mascotSize = Math.round(size * MASCOT_FILL);
+  const resized = await sharp(mascot).resize(mascotSize, mascotSize).toBuffer();
+  const offset = Math.round((size - mascotSize) / 2);
+
+  await sharp(gradientSvg(size))
+    .ensureAlpha()
+    .composite([{ input: resized, left: offset, top: offset }])
+    .png({ compressionLevel: 9 })
+    .toFile(outPath);
+}
+
+// =========================================================
+// ICO construction (single 32 px PNG payload)
+// =========================================================
+
+function buildIco(pngData: Buffer): Buffer {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // type = ICO
+  header.writeUInt16LE(1, 4); // image count
+
+  const entry = Buffer.alloc(16);
+  entry.writeUInt8(32, 0); // width
+  entry.writeUInt8(32, 1); // height
+  entry.writeUInt8(0, 2); // color count (0 = no palette)
+  entry.writeUInt8(0, 3); // reserved
+  entry.writeUInt16LE(1, 4); // planes
+  entry.writeUInt16LE(32, 6); // bits per pixel
+  entry.writeUInt32LE(pngData.length, 8);
+  entry.writeUInt32LE(22, 12); // offset = 6 (header) + 16 (entry)
+
+  return Buffer.concat([header, entry, pngData]);
+}
+
+// =========================================================
+// Main
+// =========================================================
+
+const mascot = await prepareMascot();
+
+const pngOutputs: string[] = [];
+
+// 32 px transparent — tab icon
+const fav32Path = resolve(PUBLIC, "favicon-32.png");
+await writeTransparent(mascot, 32, fav32Path);
+pngOutputs.push(fav32Path);
+
+// 180 px gradient — iOS home screen
+const applePath = resolve(PUBLIC, "apple-touch-icon.png");
+await writeGradientIcon(mascot, 180, applePath);
+pngOutputs.push(applePath);
+
+// 192 px gradient — Android / PWA
+const androidPath = resolve(PUBLIC, "icon-192.png");
+await writeGradientIcon(mascot, 192, androidPath);
+pngOutputs.push(androidPath);
+
+// favicon.ico from the 32 px PNG
+const png32 = await sharp(mascot).resize(32, 32).png().toBuffer();
+const icoPath = resolve(PUBLIC, "favicon.ico");
+await Bun.write(icoPath, buildIco(png32));
+
+// Crush all PNGs with oxipng
+execFileSync("oxipng", ["-o", "max", "--strip", "safe", ...pngOutputs], {
+  stdio: "inherit",
+});
+
+for (const p of [...pngOutputs, icoPath]) {
+  console.log(`wrote ${p}`);
+}
