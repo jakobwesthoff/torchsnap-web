@@ -64,7 +64,17 @@ const RESULTS: Result[] = [
 ];
 ---
 
-<div class="relative mx-auto mt-[150px] w-full max-w-[520px]">
+{/* `min-w-0` is load-bearing. The result subtitles below are
+    `truncate`, and nowrap text contributes its full width to
+    intrinsic sizing — the longest one gives this card a 369px
+    min-content floor. As a grid item the default `min-width: auto`
+    would hand that floor to the hero's auto-sized track, pushing it
+    past the viewport on phones and widening the copy column enough
+    that the button row never reaches its wrap point. Allowing the
+    card to shrink keeps the track at the container width; the
+    subtitles ellipsize earlier on narrow screens, which is what
+    `truncate` is there for. */}
+<div class="relative mx-auto mt-[150px] w-full min-w-0 max-w-[520px]">
   {/* Snappy perched on top of the search bar — only the paws dip
       into the card. */}
   <Image
