@@ -19,6 +19,30 @@
   font-display: swap;
 }
 
+/* Caveat — © The Caveat Project Authors
+ * Licensed under the SIL Open Font License 1.1
+ * https://github.com/googlefonts/caveat
+ *
+ * Self-hosted for the same reason as Inter above. Only the latin
+ * subset at weight 600 ships, which is all the handwritten
+ * annotations need. The token --font-hand in theme.css exposes it
+ * through the `font-hand` utility.
+ */
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/Caveat-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Site-local token, declared here rather than in theme.css because
+ * that file is a manual mirror of the plugin-SDK bundle (ADR-0005)
+ * and stays byte-comparable with upstream. */
+@theme {
+  --font-hand: "Caveat", "Segoe Script", "Bradley Hand", cursive;
+}
+
 /* Inter OpenType features used by the design bundle (per
  * https://rsms.me/inter):
  *   cv11 — single-story 'a' (one-bowl form)

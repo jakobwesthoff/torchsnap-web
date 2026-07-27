@@ -61,12 +61,16 @@ const GITHUB_URL = "https://github.com/jakobwesthoff/torchsnap";
           {link.label}
         </a>
       ))}
+      {/* StarNudge measures this element to aim its arrow. The nudge
+          draws nothing when the box is zero-sized, which is what
+          happens below `md` where this nav is hidden. */}
       <a
         href={GITHUB_URL}
         aria-label="GitHub"
         target="_blank"
         rel="noopener noreferrer"
         class="text-text-secondary hover:text-text-primary transition-colors"
+        data-star-nudge-anchor
       >
         <Icon name="simple-icons:github" class="h-5 w-5" />
       </a>

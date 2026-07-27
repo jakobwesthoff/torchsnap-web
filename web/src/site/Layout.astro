@@ -2,6 +2,7 @@
 import "../design-system/global.css";
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
+import StarNudge from "./StarNudge.astro";
 
 interface Props {
   title?: string;
@@ -101,6 +102,11 @@ const ogImage = new URL("/og.png", origin).toString();
     </script>
   </head>
   <body class="flex min-h-svh flex-col bg-surface text-text-primary font-sans antialiased">
+    {/* First child of <body> on purpose: the nudge's host is
+        `position: sticky`, which resolves against the nearest
+        scrolling ancestor. Only from the body's own flow does it
+        stick to the viewport top rather than to some section. */}
+    <StarNudge />
     <Header />
     {/* Sections inside main own their own backgrounds (full-bleed)
         and constrain their content + border with an inner

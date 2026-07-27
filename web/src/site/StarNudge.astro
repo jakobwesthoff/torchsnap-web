@@ -1,0 +1,61 @@
+---
+// Decorative handwritten arrow pointing at the header's GitHub link.
+//
+// The arrow has to touch an element it does not contain, so its
+// geometry cannot be expressed in static markup: the anchor's
+// position depends on the viewport width and on which nav links are
+// visible. The paths below therefore ship empty and are filled in by
+// starNudge.client.ts from the anchor's measured box.
+//
+// The host is a zero-height `sticky top-0` bar rendered as the first
+// child of <body>. That makes its coordinate origin track the top of
+// the viewport, which is the same frame of reference
+// getBoundingClientRect() reports in — so measured values can be
+// written straight into the SVG with no scroll-offset arithmetic. It
+// occupies no layout space and cannot disturb the page below it.
+//
+// Ornamental only: aria-hidden, never hit-testable, unselectable, and
+// invisible until a measurement succeeds (which never happens while
+// the anchor is display:none below `md`).
+---
+
+<div
+  aria-hidden="true"
+  class="pointer-events-none sticky top-0 z-50 h-0 select-none"
+  data-star-nudge-host
+>
+  <svg
+    class="absolute left-0 top-0 hidden w-full text-accent/85"
+    style="overflow: visible"
+    fill="none"
+    data-star-nudge
+  >
+    {/* Rendered as SVG <text> rather than an HTML span so the label
+        shares one coordinate space with the arrow: a single measured
+        origin places both, and they can never drift apart. */}
+    <text
+      data-star-nudge-text
+      text-anchor="end"
+      class="fill-accent/90 font-hand"
+      style="font-size: 21px"
+    >Star it on GitHub!</text>
+    <path
+      data-star-nudge-shaft
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+    ></path>
+    <path
+      data-star-nudge-head
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+  </svg>
+</div>
+
+<script>
+  import { initStarNudge } from "./starNudge.client";
+  initStarNudge();
+</script>
