@@ -106,10 +106,11 @@ const snappyH = SNAPPY_VISIBLE_HEIGHT;
 //     tracking (-0.025 em), tight line-height (1.05). Sized roughly
 //     2× the live page's 64 px for the OG canvas.
 //
-// Eyebrow font size below was measured once (resvg innerBBox of each
-// rendered text) so its rendered width matches the wordmark's width
-// exactly: 30 → 455 px, 124 → 613 px, ratio 1.347 → 40.4 px.
-const EYEBROW_FONT = 40;
+// Eyebrow font size below was measured once (ink extent of each text
+// row in the rendered PNG) so its rendered width matches the
+// wordmark's width exactly: at 40 px the eyebrow measures 606 px
+// against the wordmark's 600 px, ratio 0.990 → 39.6 px.
+const EYEBROW_FONT = 39.6;
 const WORDMARK_FONT = 124;
 
 const tree = (
@@ -146,7 +147,10 @@ const tree = (
           color: "transparent",
         }}
       >
-        Light · Find · Launch
+        {/* Satori applies letter-spacing to non-breaking spaces but
+            not to regular ones, and the separators need the same
+            tracking as the letters around them. */}
+        {"Light · Find · Launch"}
       </div>
       <div
         style={{
