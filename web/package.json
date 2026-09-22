@@ -13,16 +13,16 @@
     "trim:image": "bun run tools/trim-image.ts"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.4",
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/simple-icons": "^1.2.80",
-    "@tailwindcss/vite": "^4.2.4",
-    "astro": "^6.2.1",
-    "astro-icon": "^1.1.5",
+    "@iconify-json/simple-icons": "^1.2.97",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^6.4.8",
+    "astro-icon": "^1.2.0",
     "clsx": "^2.1.1",
     "sharp": "^0.34.5",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.4"
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
