@@ -17,14 +17,17 @@
 // woff2 to the browser.
 //
 // JSX without React: Bun runs .tsx natively, and Satori accepts
-// React-style elements regardless of the framework. The
-// `jsx-runtime` shim below wires the JSX factory to a small node
-// constructor that produces Satori's expected `{ type, props }`
-// shape.
+// React-style elements regardless of the framework. The pragmas
+// below wire the JSX factory to a small node constructor that
+// produces Satori's expected `{ type, props }` shape. Bun honors
+// `@jsx` only under the classic runtime. Under the automatic runtime
+// it imports `react/jsx-dev-runtime`, which this project does not
+// install.
 //
 // Output: web/public/og.png. Layout.astro emits the matching
 // og:image / twitter:image meta tags.
 
+/** @jsxRuntime classic */
 /** @jsx jsx */
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
