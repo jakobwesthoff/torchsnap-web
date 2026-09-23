@@ -87,15 +87,30 @@ bun run trim:image <input> --padding 16     # keeps 16 px of margin
 
 ## Releasing
 
-1. Start from a clean checkout of the commit you want to release.
-2. Run `bun install --frozen-lockfile`.
-3. Run `bun run build` and confirm it finishes with only the expected
-   warning listed above.
-4. Run `bun run preview` and check both pages in a browser, in light and
-   dark mode.
-5. Publish the contents of `web/dist/`.
+The site is published with GitHub Pages under the custom domain
+`torchsnap.app` (ADR 0007). The workflow `.github/workflows/deploy.yml`
+at the repository root builds the site on every push to `main`, on pull
+requests, and on manual runs. It deploys `web/dist/` only from `main`,
+and only while the repository is public. A private repository gets the
+build as CI and no deployment.
 
-Publishing is not set up yet. No hosting target has been chosen and the
-repository has no deploy workflow. The open todo
-`todos/01kqq3e80xkpwmrfrwvkggf1rd-decide-and-document-hosting.md` covers
-that decision.
+Before pushing a change to `main`:
+
+1. Run `bun install --frozen-lockfile`.
+2. Run `bun run build` and confirm it finishes with only the expected
+   warning listed above.
+3. Run `bun run preview` and check both pages in a browser, in light and
+   dark mode.
+
+The first deployment needs these repository settings:
+
+1. The repository is public.
+2. Under Settings, Pages, the source is "GitHub Actions" and the custom
+   domain is `torchsnap.app`. The workflow does not write a `CNAME`
+   file, and GitHub ignores one for workflow deployments.
+3. The apex `torchsnap.app` has A records for `185.199.108.153`,
+   `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`, and AAAA
+   records for `2606:50c0:8000::153`, `2606:50c0:8001::153`,
+   `2606:50c0:8002::153`, and `2606:50c0:8003::153`.
+4. Once GitHub offers it, "Enforce HTTPS" is on. GitHub says this can
+   take up to 24 hours after the domain is set.
