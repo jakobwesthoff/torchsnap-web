@@ -2,6 +2,13 @@
 import Button from "../../design-system/Button.astro";
 import PlatformPill from "./PlatformPill.astro";
 import LauncherPreview from "./LauncherPreview.astro";
+
+// GitHub redirects `releases/latest/download/<name>` to the asset of that
+// name in the newest published release. Every torchsnap release carries
+// the universal DMG as `Torchsnap.dmg`, so this link needs no update per
+// release.
+const DOWNLOAD_URL =
+  "https://github.com/jakobwesthoff/torchsnap/releases/latest/download/Torchsnap.dmg";
 ---
 
 <section id="download" class="flex flex-1 flex-col">
@@ -24,7 +31,7 @@ import LauncherPreview from "./LauncherPreview.astro";
     </p>
 
     <div class="mt-9 flex flex-wrap items-center gap-3">
-      <Button variant="primary" icon="heroicons:arrow-down-tray" href="#download">
+      <Button variant="primary" icon="heroicons:arrow-down-tray" href={DOWNLOAD_URL}>
         Download for macOS
       </Button>
       <Button
