@@ -15,15 +15,16 @@
 // in their respective brands so the visual immediately reads
 // "WASM and React are the technologies, Snappy is us."
 //
-// A dedicated developer guide lives elsewhere; this section
-// only mentions it in a single trailing line.
+// The header's "For developers" entry jumps to this box
+// (`#developers`). The developer guide itself lives on
+// docs.torchsnap.app; the trailing line links it.
 
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import snappyOriginal from "../../assets/mascots/snappy-original-1024.png";
 ---
 
-<div class="rounded-[20px] border border-border bg-surface-inset p-8 md:p-12">
+<div id="developers" class="rounded-[20px] border border-border bg-surface-inset p-8 md:p-12">
   <div class="grid gap-10 md:grid-cols-[1.1fr_1fr] md:items-start md:gap-16">
     <div class="max-w-[520px]">
       <p class="eyebrow mb-3">Open ecosystem</p>
@@ -43,9 +44,20 @@ import snappyOriginal from "../../assets/mascots/snappy-original-1024.png";
       </p>
 
       <p class="mt-6 text-sm text-text-muted">
-        A dedicated SDK guide lands alongside the public beta. For
-        now: peek at the bundled Gadgets in the source repo to see
-        the shape of things.
+        Ready to build your own? The
+        <a
+          href="https://docs.torchsnap.app/development/"
+          class="border-b border-dashed border-border text-text-secondary hover:text-text-primary transition-colors"
+        >gadget guide</a>
+        walks you through your first one, and the bundled Gadgets in
+        the
+        <a
+          href="https://github.com/jakobwesthoff/torchsnap/tree/main/gadgets"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="border-b border-dashed border-border text-text-secondary hover:text-text-primary transition-colors"
+        >source repo</a>
+        show the shape of things.
       </p>
     </div>
 
