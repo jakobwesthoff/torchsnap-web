@@ -61,6 +61,6 @@ export const CAST: CastEntry[] = [
   { id: "relic-hunter-idol",     eyebrow: "#077 · Adventurer", headline: "Field expedition",body: "Swapping the idol for a sandbag. It belongs in the app catalogue.", rot: -5 },
   // Bottom row (3)
   { id: "banana-goggle-minion",  eyebrow: "#055 · Banana",     headline: "Peel & launch",   body: "Snappy armed with a banana. LAUNCH! BA-NA-NA!",                     rot: -4 },
-  { id: "striped-sweater-fedora",eyebrow: "#031 · Slasher",    headline: "Dream layer",     body: "Haunting your dreams. It knows what apps you want to launch next.", rot: 2 },
+  { id: "striped-sweater-fedora",eyebrow: "#031 · Slasher",    headline: "Dream slayer",    body: "Haunting your dreams. It knows what apps you want to launch next.", rot: 2 },
   { id: "werewolf",              eyebrow: "#???",              headline: "Lunar edition",   body: "Hear that howl? Something hairy this way comes.",                   rot: 5,  silhouette: true },
 ];
