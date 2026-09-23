@@ -25,6 +25,11 @@ interface Props {
 
 const { gadget, index } = Astro.props;
 const screenshotFirst = index % 2 === 1;
+
+// Body copy marks typed input such as `!gh torchsnap` with
+// backticks. Splitting on them leaves the quoted spans at the
+// odd indices, which render as inline code.
+const bodyParts = gadget.body.split("`");
 ---
 
 <article
@@ -69,7 +74,13 @@ const screenshotFirst = index % 2 === 1;
     <p
       class="mt-4 text-pretty text-base leading-relaxed text-text-secondary"
     >
-      {gadget.body}
+      {bodyParts.map((part, i) =>
+        i % 2 === 1 ? (
+          <code class="rounded bg-surface-inset px-1 py-0.5 font-mono text-[0.9em] text-text-primary">{part}</code>
+        ) : (
+          part
+        ),
+      )}
     </p>
   </div>
 
