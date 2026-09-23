@@ -6,9 +6,12 @@ type OS = "mac" | "win" | "linux";
 interface Props {
   os: OS;
   available?: boolean;
+  // Qualifier shown after the label of an available platform, such as the
+  // hardware the download runs on.
+  note?: string;
 }
 
-const { os, available = false } = Astro.props;
+const { os, available = false, note } = Astro.props;
 
 const META: Record<OS, { icon: string; label: string }> = {
   mac: { icon: "simple-icons:apple", label: "macOS" },
@@ -29,5 +32,6 @@ const { icon, label } = META[os];
 >
   <Icon name={icon} class="h-3.5 w-3.5" />
   <span>{label}</span>
+  {available && note && <span class="text-text-muted">· {note}</span>}
   {!available && <span class="text-text-muted/80">· Coming soon</span>}
 </span>

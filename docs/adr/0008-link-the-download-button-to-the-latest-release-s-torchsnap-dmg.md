@@ -22,9 +22,11 @@ Tauri names its DMGs with version and architecture, for example
 The button links
 `https://github.com/jakobwesthoff/torchsnap/releases/latest/download/Torchsnap.dmg`.
 
-Every torchsnap release carries one universal DMG under the name
-`Torchsnap.dmg`. The site offers no separate Apple Silicon and Intel
-downloads.
+Every torchsnap release carries one DMG under the name `Torchsnap.dmg`.
+It runs on Macs with Apple silicon only. The site offers no Intel
+download.
+
+The hero's macOS platform pill reads "macOS · Apple silicon".
 
 ## Consequences
 
@@ -33,3 +35,4 @@ downloads.
   link with a 404.
 - When this decision was made, torchsnap had no release, so no
   `Torchsnap.dmg` existed yet.
+- Macs with an Intel processor cannot run the downloaded app.
