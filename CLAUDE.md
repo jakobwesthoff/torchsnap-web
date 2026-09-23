@@ -1,33 +1,41 @@
-# Project conventions
+# torchsnap-web: project rules
+
+## Layout
+
+- `web/`: the Astro site. Run all `bun` commands there.
+- `web/src/`: vertical slices per concern (<https://tkdodo.eu/blog/the-vertical-codebase>):
+  - `web/src/<concern>/` (`landing/`, `site/`, `theme/`): components,
+    scripts and styles of one concern together.
+  - `web/src/design-system/`: non-domain shared visuals, utilities, global
+    stylesheet entry, design tokens.
+  - `web/src/pages/`: Astro routes.
+  - Promote code from a page into its own folder once it is shared or
+    grows past one file.
+- `assets/`: OG card sources (fonts, trimmed mascot).
+- `docs/adr/`: ADRs. `docs/copywriting-guide.md`: voice rules.
+- Nothing is imported from the torchsnap repo; reused code is copied
+  (ADR 0005).
+
+## Commands (in `web/`)
+
+- `bun install`, `bun run dev`, `bun run build`, `bun run preview`.
+- `bun run build:favicon`, `bun run build:og`: regenerate committed
+  assets. Details in `web/README.md`.
+
+## Copy
+
+All text on the site follows `docs/copywriting-guide.md`.
 
 ## ADRs
 
-ADRs live in `docs/adr/` and are managed with the `adrs` tool
-(`EDITOR=true adrs ...` for create / link / status / list).
+- Create: `EDITOR=true adrs new "<title>"` (also `link`, `status`,
+  `list`). Set Status to `Accepted` when decided.
+- Cover context, decision, consequences. Only what was decided; no
+  speculation about CI, tooling or alternatives that were never on the
+  table; no filler.
 
-Write every ADR plain and to the point:
+## Deployment
 
-- Cover the context, decision, and consequences with enough detail
-  that the decision is understandable later — but no more.
-- Document only what has actually been decided. Do not speculate
-  about CI setups, future tooling, or alternatives that were never
-  on the table.
-- No marketing prose, no padding, no content added just to fill a
-  section.
-
-## Source layout
-
-`web/src/` is organized as **vertical slices** per
-<https://tkdodo.eu/blog/the-vertical-codebase>: group code by what
-it accomplishes, not by technical type. Components, hooks, types,
-utilities, and styles for one concern live together in one folder.
-
-- Verticals live at `web/src/<concern>/` (e.g. `theme/`).
-- `web/src/design-system/` holds non-domain shared visuals,
-  utilities, the global stylesheet entry, and the design tokens.
-- Astro-conventional folders stay where Astro expects them:
-  `web/src/pages/`, `web/src/layouts/`.
-- A vertical may be promoted from inline-in-a-page to its own
-  folder once it is shared across pages or grows past a single
-  file. No "rule of three" — promote when the grouping makes
-  reading the code easier.
+GitHub Pages via `.github/workflows/deploy.yml`; deploys only while the
+repository is public (ADR 0007). Go-live settings: `web/README.md`,
+"Releasing".
