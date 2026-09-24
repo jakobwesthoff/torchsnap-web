@@ -3,6 +3,24 @@
 // names the bundled Gadgets inline and signals that the list
 // will grow. Sits between the featured trio above and the
 // ecosystem closer below; its job is to be quiet.
+//
+// Each name links to its docs page. The links reuse the
+// dashed-underline style of EcosystemPillars so the paragraph
+// still reads as prose rather than a link list.
+
+import { GADGET_DOCS } from "./gadgets";
+
+const BUNDLED = [
+  { label: "App launcher", href: GADGET_DOCS.appLauncher },
+  { label: "clipboard history", href: GADGET_DOCS.clipboardManager },
+  { label: "system commands", href: GADGET_DOCS.systemCommands },
+  { label: "system preferences", href: GADGET_DOCS.systemPreferences },
+  { label: "Open URL", href: GADGET_DOCS.openUrl },
+  { label: "keep-awake sessions", href: GADGET_DOCS.awake },
+];
+
+const linkClass =
+  "border-b border-dashed border-border text-text-secondary hover:text-text-primary transition-colors";
 ---
 
 <div>
@@ -10,9 +28,14 @@
   <p
     class="max-w-[780px] text-pretty text-base leading-relaxed text-text-secondary md:text-lg"
   >
-    App launcher, clipboard history, system commands, system
-    preferences, Open URL. All already covered out of the box.
-    The list keeps growing as we ship more, and grows further
-    once third-party Gadgets arrive.
+    {BUNDLED.map((gadget, i) => (
+      <>
+        <a href={gadget.href} class={linkClass}>{gadget.label}</a>{i < BUNDLED.length - 1 ? ", " : "."}
+      </>
+    ))}{" "}
+    All already covered out of the box. The list keeps growing as
+    we ship more, and grows further once third-party Gadgets
+    arrive. Each one has its own page in{" "}
+    <a href={GADGET_DOCS.overview} class={linkClass}>the docs</a>.
   </p>
 </div>

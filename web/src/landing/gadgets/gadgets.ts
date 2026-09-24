@@ -18,6 +18,25 @@ import bangsScreenshotDark from "../../assets/gadgets/dark/bangs.png";
 import calculatorScreenshotLight from "../../assets/gadgets/light/calculator.png";
 import calculatorScreenshotDark from "../../assets/gadgets/dark/calculator.png";
 
+// Each bundled Gadget has a page under /start/gadgets/ on
+// docs.torchsnap.app. The rows and the "Already in the box"
+// paragraph both link there, so every slug the site depends
+// on lives in this one map.
+const DOCS_BASE = "https://docs.torchsnap.app/start/gadgets/";
+
+export const GADGET_DOCS = {
+  overview: DOCS_BASE,
+  appLauncher: `${DOCS_BASE}app-launcher/`,
+  clipboardManager: `${DOCS_BASE}clipboard-manager/`,
+  systemCommands: `${DOCS_BASE}system-commands/`,
+  systemPreferences: `${DOCS_BASE}system-preferences/`,
+  openUrl: `${DOCS_BASE}open-url/`,
+  awake: `${DOCS_BASE}awake/`,
+  emojiPicker: `${DOCS_BASE}emoji-picker/`,
+  calculator: `${DOCS_BASE}calculator/`,
+  bangs: `${DOCS_BASE}bangs/`,
+} as const;
+
 export interface FeaturedGadget {
   /** Display name on the row, also used in the heading. */
   name: string;
@@ -37,6 +56,9 @@ export interface FeaturedGadget {
    *  capture is different enough that a generic "launcher with X
    *  Gadget active" template would lose accessibility value. */
   alt: string;
+  /** The Gadget's page on docs.torchsnap.app: triggers, settings
+   *  and shortcuts the marketing copy leaves out. */
+  docs: string;
 }
 
 export const FEATURED: FeaturedGadget[] = [
@@ -50,6 +72,7 @@ export const FEATURED: FeaturedGadget[] = [
     tilt: "left",
     screenshot: { light: emojiPickerScreenshotLight, dark: emojiPickerScreenshotDark },
     alt: "Torchsnap launcher in emoji-picker mode: the search field reads ':part', a grid of emojis fills the body, and the footer labels the selected glyph as 'partying_face — partying face'.",
+    docs: GADGET_DOCS.emojiPicker,
   },
   {
     name: "Calculator",
@@ -61,6 +84,7 @@ export const FEATURED: FeaturedGadget[] = [
     tilt: "right",
     screenshot: { light: calculatorScreenshotLight, dark: calculatorScreenshotDark },
     alt: "Torchsnap launcher with the expression '2^32 - 1' typed; the calculator's inline row shows the result 4294967295 above the standard footer.",
+    docs: GADGET_DOCS.calculator,
   },
   {
     name: "Bangs",
@@ -72,5 +96,6 @@ export const FEATURED: FeaturedGadget[] = [
     tilt: "left",
     screenshot: { light: bangsScreenshotLight, dark: bangsScreenshotDark },
     alt: "Torchsnap launcher with 'pantine !crates' typed; the top result opens 'pantine' in the Rust community's crate host, with several System Settings results listed below.",
+    docs: GADGET_DOCS.bangs,
   },
 ];

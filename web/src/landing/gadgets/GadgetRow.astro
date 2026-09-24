@@ -82,6 +82,19 @@ const bodyParts = gadget.body.split("`");
         ),
       )}
     </p>
+
+    {/* The copy sells the moment; the docs page carries the
+        triggers, settings and shortcuts. Same dashed-underline
+        link style as the developer-guide line in
+        EcosystemPillars. The screen-reader suffix names the
+        Gadget, since three identical "How it works" links read
+        as ambiguous out of context. */}
+    <p class="mt-5 text-sm">
+      <a
+        href={gadget.docs}
+        class="border-b border-dashed border-border text-text-secondary hover:text-text-primary transition-colors"
+      >How it works<span class="sr-only">: the {gadget.name} Gadget</span></a>
+    </p>
   </div>
 
   {/* Screenshot. On desktop, explicitly placed in the column
