@@ -25,6 +25,14 @@ bun install
 bun run dev
 ```
 
+The dev server and the build download the latest Torchsnap release's
+`release.json` (see "The update feed" below). Until a release carries
+one, point them at a local file:
+
+```sh
+TORCHSNAP_RELEASE_FEED=/path/to/release.json bun run dev
+```
+
 The dev server listens on <http://localhost:4321>. It also accepts
 requests through `*.trycloudflare.com` hosts, so
 `cloudflared tunnel --url http://localhost:4321` exposes it publicly for
@@ -44,6 +52,7 @@ bun run preview
 The build output contains:
 
 - `index.html` and `impressum/index.html`.
+- `updates/latest.json`, the update feed (see below).
 - `sitemap-index.xml` and `sitemap-0.xml`. The Impressum page is left out
   of the sitemap because it carries `<meta name="robots" content="noindex">`.
 - Everything in `web/public/`, including `robots.txt`, the favicons,
@@ -52,6 +61,24 @@ The build output contains:
 Absolute URLs in the output (canonical links, OG tags, sitemap entries)
 come from `site` in `astro.config.mjs`, which is `https://torchsnap.app`.
 `robots.txt` names the same origin for its sitemap.
+
+### The update feed
+
+Every Torchsnap release carries `release.json`, the feed installed apps
+read to find updates (torchsnap ADR 0053). The build downloads it from
+`https://github.com/jakobwesthoff/torchsnap/releases/latest/download/release.json`,
+serves it unchanged as `https://torchsnap.app/updates/latest.json`, and
+shows its version in the hero's macOS pill, linked to the release notes
+(ADR 0009). GitHub's `releases/latest` skips prereleases.
+
+The build fails when the download fails or the file has no stable
+version, so the previous deployment and its feed stay online.
+`TORCHSNAP_RELEASE_FEED` replaces the source with another URL or a local
+path.
+
+`just release-publish` in the torchsnap repository starts the deploy
+workflow after publishing a stable release, so the feed and the version
+follow each release.
 
 ### Expected build warnings
 

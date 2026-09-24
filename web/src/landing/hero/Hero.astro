@@ -2,6 +2,7 @@
 import Button from "../../design-system/Button.astro";
 import PlatformPill from "./PlatformPill.astro";
 import LauncherPreview from "./LauncherPreview.astro";
+import { latestRelease } from "../../release/latest";
 
 // GitHub redirects `releases/latest/download/<name>` to the asset of that
 // name in the newest published release. Every torchsnap release carries
@@ -9,6 +10,9 @@ import LauncherPreview from "./LauncherPreview.astro";
 // release.
 const DOWNLOAD_URL =
   "https://github.com/jakobwesthoff/torchsnap/releases/latest/download/Torchsnap.dmg";
+
+// The same release the download link resolves to, read at build time.
+const latest = await latestRelease();
 ---
 
 <section id="download" class="flex flex-1 flex-col">
@@ -45,7 +49,12 @@ const DOWNLOAD_URL =
     </div>
 
     <div class="mt-7 flex flex-wrap items-center gap-2">
-      <PlatformPill os="mac" available note="Apple silicon" />
+      <PlatformPill
+        os="mac"
+        available
+        note="Apple silicon"
+        version={{ number: latest.version, url: latest.url }}
+      />
       <PlatformPill os="win" />
       <PlatformPill os="linux" />
     </div>

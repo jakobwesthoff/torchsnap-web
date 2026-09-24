@@ -6,6 +6,8 @@ Date: 2026-09-23
 
 Accepted
 
+Amended by [9. Serve the update feed and the latest version from the latest release](0009-serve-the-update-feed-and-the-latest-version-from-the-latest-release.md)
+
 ## Context
 
 The hero's "Download for macOS" button needs a target that always serves
