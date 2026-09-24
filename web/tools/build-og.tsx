@@ -1,5 +1,13 @@
 // Composes the Torchsnap social-share (Open Graph) card at 1200×630.
 //
+// KEEP IN SYNC: docs.torchsnap.app has its own variant of this card,
+// built by tools/build-og.tsx in the torchsnap-docs repository. Both
+// cards share colours, typography, pipeline and the vertical,
+// square-safe layout. The docs card uses the reading owl, adds "Docs"
+// to the wordmark and has smaller sizes to fit the longer wordmark.
+// A change to the shared design here likely needs the same change
+// there, and the other way round.
+//
 // Pipeline:
 //   1. Satori takes a JSX tree built with Flexbox layout and resolves
 //      every position / size — no manual x/y math, the composition
@@ -89,11 +97,16 @@ const [semibold, bold, snappyPng] = await Promise.all([
 ]);
 const snappyDataUrl = `data:image/png;base64,${snappyPng.toString("base64")}`;
 
-// Display the mascot at 80 % of the canvas height; width follows
-// from the trimmed PNG's native aspect ratio. The trimmed source
-// has no transparent padding so this height is the actual rendered
-// figure.
-const SNAPPY_VISIBLE_HEIGHT = Math.round(H * 0.65);
+// Slack shows link-card images in a square slot and centre-crops the
+// 1200×630 card to its middle 630×630. Mascot, eyebrow and wordmark
+// are therefore stacked vertically and sized so the whole group fits
+// that square: the rendered group measures 504×534 px, leaving about
+// 60 px at the sides and 48 px above and below. Wider platforms (X,
+// LinkedIn, Discord) show the full card with the same group centred.
+//
+// The trimmed source has no transparent padding, so this height is
+// the rendered figure; width follows from its native aspect ratio.
+const SNAPPY_VISIBLE_HEIGHT = 340;
 const snappyW = Math.round(SNAPPY_VISIBLE_HEIGHT * (SNAPPY_NATIVE_W / SNAPPY_NATIVE_H));
 const snappyH = SNAPPY_VISIBLE_HEIGHT;
 
@@ -103,37 +116,34 @@ const snappyH = SNAPPY_VISIBLE_HEIGHT;
 //     accent into the orange gradient via background-clip: text so
 //     it carries the brand colours visibly on the dark surface.
 //   - Wordmark mirrors the hero <h1> — semibold (600), tight
-//     tracking (-0.025 em), tight line-height (1.05). Sized roughly
-//     2× the live page's 64 px for the OG canvas.
+//     tracking (-0.025 em), tight line-height (1.05).
 //
-// Eyebrow font size below was measured once (ink extent of each text
-// row in the rendered PNG) so its rendered width matches the
-// wordmark's width exactly: at 40 px the eyebrow measures 606 px
-// against the wordmark's 600 px, ratio 0.990 → 39.6 px.
-const EYEBROW_FONT = 39.6;
-const WORDMARK_FONT = 124;
+// The wordmark size is the largest that keeps the group inside the
+// square. The eyebrow size aligns it optically with the wordmark. At
+// 33.3 px both rows measure exactly 504 px of ink, but the eyebrow's
+// square "L" and "H" then look wider than the wordmark's round "p"
+// ending. At 32.6 px the eyebrow sits about 5 px inside the wordmark
+// on each side, which reads as flush.
+const EYEBROW_FONT = 32.6;
+const WORDMARK_FONT = 104;
 
 const tree = (
   <div
     style={{
       display: "flex",
+      flexDirection: "column",
       width: "100%",
       height: "100%",
       alignItems: "center",
       justifyContent: "center",
-      gap: 86,
-      padding: "0 60px",
       backgroundColor: SURFACE,
     }}
   >
-    <img src={snappyDataUrl} width={snappyW} height={snappyH} style={{ display: "block" }} />
-    {/* Text column laid out as block flow rather than a flex gap so
+    <img src={snappyDataUrl} width={snappyW} height={snappyH} style={{ display: "block", marginBottom: 28 }} />
+    {/* Text block laid out as block flow rather than a flex gap so
         the eyebrow's bottom margin (typographic spacing) does the
-        work, not an out-of-band layout property. The rhythm mirrors
-        the live hero: eyebrow `.mb-5` (20 px) above an h1 sized
-        roughly 5× the eyebrow — here the wordmark is ~3× so the
-        margin scales proportionally. */}
-    <div style={{ display: "flex", flexDirection: "column" }}>
+        work, not an out-of-band layout property. */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <div
         style={{
           fontSize: EYEBROW_FONT,
