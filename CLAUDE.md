@@ -18,6 +18,23 @@
 
 All text on the site follows `docs/copywriting-guide.md`.
 
+## Tests and quality gates
+
+- The quality gate is `bun run build` in `web/`. It must succeed with
+  only the warnings listed in `web/README.md`, "Expected build
+  warnings". Fix any other warning or error.
+- At the start of a session, before the first change that can affect
+  the gate's outcome, run it once to get a baseline. If the baseline
+  already fails, tell the user what fails and propose fixing it before
+  starting the other work.
+- Code that runs on its own, such as the scripts in `web/tools/` and
+  helpers like `web/src/design-system/cn.ts`, gets thorough tests with
+  `bun test` whenever you touch it, edited code as much as new code.
+  Cover the error and edge cases, not just the happy path.
+- Work test-first there. For a bug, write a regression test that
+  reproduces it, run it and see it fail, then fix the code until it
+  passes.
+
 ## Todos
 
 Todos live in `todos/`. `todos/README.md` describes their format.
