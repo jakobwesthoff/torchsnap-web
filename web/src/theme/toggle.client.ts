@@ -3,6 +3,10 @@
 // keeps `data-theme-preference` on <html> in sync (which the CSS
 // rules in ThemeToggle.astro use to position the active pill), and
 // listens for OS-level color-scheme changes when in "system" mode.
+//
+// Every toggle on the page shares the one preference: picking an
+// option in any of them updates all, and a single listener follows the
+// OS while the preference is "system".
 
 import {
   applyTheme,
@@ -15,13 +19,13 @@ import {
 const ORDER: ThemePreference[] = ["system", "light", "dark"];
 
 export function initThemeToggle(): void {
-  const root = document.querySelector<HTMLElement>(".theme-toggle");
-  if (!root) return;
-
-  const buttons = Array.from(
-    root.querySelectorAll<HTMLButtonElement>("button[role='radio'][data-value]"),
-  );
-  if (buttons.length === 0) return;
+  const groups = Array.from(document.querySelectorAll<HTMLElement>(".theme-toggle"))
+    .map((root) =>
+      Array.from(root.querySelectorAll<HTMLButtonElement>("button[role='radio'][data-value]")),
+    )
+    .filter((buttons) => buttons.length > 0);
+  if (groups.length === 0) return;
+  const allButtons = groups.flat();
 
   // The system-mode listener is only attached while the active
   // preference is "system" — track its disposer so we can detach
@@ -36,13 +40,17 @@ export function initThemeToggle(): void {
     detachSystemListener = () => mql.removeEventListener("change", handler);
   }
 
+  function markChecked(value: ThemePreference) {
+    for (const btn of allButtons) {
+      btn.setAttribute("aria-checked", String(btn.dataset.value === value));
+    }
+  }
+
   function setPreference(next: ThemePreference) {
     writePreference(next);
     applyTheme(resolvePreference(next));
     document.documentElement.dataset.themePreference = next;
-    for (const btn of buttons) {
-      btn.setAttribute("aria-checked", String(btn.dataset.value === next));
-    }
+    markChecked(next);
     if (next === "system") {
       attachSystemListener();
     } else {
@@ -56,45 +64,45 @@ export function initThemeToggle(): void {
   // buttons' aria-checked attributes (which start at "false") and
   // attach the system-mode listener if appropriate.
   const initial = readPreference();
-  for (const btn of buttons) {
-    btn.setAttribute("aria-checked", String(btn.dataset.value === initial));
-  }
+  markChecked(initial);
   if (initial === "system") attachSystemListener();
 
-  // Click selects the option. Arrow Left/Right move focus and
-  // selection between options, matching the WAI-ARIA radiogroup
-  // pattern. Home/End jump to the first/last option.
-  for (const btn of buttons) {
-    btn.addEventListener("click", () => {
-      const value = btn.dataset.value as ThemePreference | undefined;
-      if (value && ORDER.includes(value)) setPreference(value);
-    });
+  // Click selects the option. Arrow keys move focus and selection
+  // within one toggle, matching the WAI-ARIA radiogroup pattern.
+  // Home/End jump to its first/last option.
+  for (const buttons of groups) {
+    for (const btn of buttons) {
+      btn.addEventListener("click", () => {
+        const value = btn.dataset.value as ThemePreference | undefined;
+        if (value && ORDER.includes(value)) setPreference(value);
+      });
 
-    btn.addEventListener("keydown", (event) => {
-      const idx = buttons.indexOf(btn);
-      let target: number | null = null;
-      switch (event.key) {
-        case "ArrowRight":
-        case "ArrowDown":
-          target = (idx + 1) % buttons.length;
-          break;
-        case "ArrowLeft":
-        case "ArrowUp":
-          target = (idx - 1 + buttons.length) % buttons.length;
-          break;
-        case "Home":
-          target = 0;
-          break;
-        case "End":
-          target = buttons.length - 1;
-          break;
-      }
-      if (target === null) return;
-      event.preventDefault();
-      const next = buttons[target];
-      next.focus();
-      const value = next.dataset.value as ThemePreference | undefined;
-      if (value && ORDER.includes(value)) setPreference(value);
-    });
+      btn.addEventListener("keydown", (event) => {
+        const idx = buttons.indexOf(btn);
+        let target: number | null = null;
+        switch (event.key) {
+          case "ArrowRight":
+          case "ArrowDown":
+            target = (idx + 1) % buttons.length;
+            break;
+          case "ArrowLeft":
+          case "ArrowUp":
+            target = (idx - 1 + buttons.length) % buttons.length;
+            break;
+          case "Home":
+            target = 0;
+            break;
+          case "End":
+            target = buttons.length - 1;
+            break;
+        }
+        if (target === null) return;
+        event.preventDefault();
+        const next = buttons[target];
+        next.focus();
+        const value = next.dataset.value as ThemePreference | undefined;
+        if (value && ORDER.includes(value)) setPreference(value);
+      });
+    }
   }
 }

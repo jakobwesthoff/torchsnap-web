@@ -199,3 +199,91 @@ describe("following the OS in system mode", () => {
     expect(media.listenerCount()).toBe(1);
   });
 });
+
+// =========================================================
+// Several toggles on one page
+// =========================================================
+
+function renderToggles(count: number) {
+  const toggle = `
+    <div class="theme-toggle" role="radiogroup" aria-label="Theme">
+      <button type="button" role="radio" data-value="system" aria-checked="false"></button>
+      <button type="button" role="radio" data-value="light" aria-checked="false"></button>
+      <button type="button" role="radio" data-value="dark" aria-checked="false"></button>
+    </div>
+  `;
+  document.body.innerHTML = toggle.repeat(count);
+  return Array.from(document.querySelectorAll<HTMLElement>(".theme-toggle")).map((root) => {
+    const [system, light, dark] = Array.from(root.querySelectorAll("button"));
+    return { root, system, light, dark };
+  });
+}
+
+function checkedIn(root: HTMLElement) {
+  return Array.from(root.querySelectorAll("button"))
+    .filter((b) => b.getAttribute("aria-checked") === "true")
+    .map((b) => b.dataset.value);
+}
+
+describe("several toggles on one page", () => {
+  it("checks the stored preference in every toggle on load", () => {
+    installFakeMatchMedia("light");
+    localStorage.setItem(THEME_STORAGE_KEY, "dark");
+    const [first, second] = renderToggles(2);
+
+    initThemeToggle();
+
+    expect(checkedIn(first.root)).toEqual(["dark"]);
+    expect(checkedIn(second.root)).toEqual(["dark"]);
+  });
+
+  it("wires every toggle, not just the first", () => {
+    installFakeMatchMedia("light");
+    const [, second] = renderToggles(2);
+    initThemeToggle();
+
+    second.dark.click();
+
+    expect(html.dataset.themePreference).toBe("dark");
+  });
+
+  it("keeps the other toggles in sync", () => {
+    installFakeMatchMedia("light");
+    const [first, second] = renderToggles(2);
+    initThemeToggle();
+
+    first.dark.click();
+
+    expect(checkedIn(second.root)).toEqual(["dark"]);
+  });
+
+  it("moves keyboard focus only within the toggle in use", () => {
+    installFakeMatchMedia("light");
+    const [first, second] = renderToggles(2);
+    initThemeToggle();
+
+    press(second.dark, "ArrowRight");
+
+    expect(document.activeElement).toBe(second.system);
+    expect(checkedIn(first.root)).toEqual(["system"]);
+  });
+
+  it("listens to the OS once, however many toggles there are", () => {
+    const media = installFakeMatchMedia("light");
+    renderToggles(2);
+    initThemeToggle();
+    expect(media.listenerCount()).toBe(1);
+  });
+
+  it("stops following the OS once an explicit theme is picked in any toggle", () => {
+    const media = installFakeMatchMedia("light");
+    const [, second] = renderToggles(2);
+    initThemeToggle();
+
+    second.light.click();
+    media.setScheme("dark");
+
+    expect(media.listenerCount()).toBe(0);
+    expect(html.dataset.theme).toBeUndefined();
+  });
+});
