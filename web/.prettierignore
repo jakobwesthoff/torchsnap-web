@@ -1,0 +1,6 @@
+dist/
+.astro/
+bun.lock
+
+# Prose in Markdown is wrapped by hand.
+*.md
