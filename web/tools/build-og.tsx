@@ -217,7 +217,13 @@ export async function compressWithOxipng(path: string, command = "oxipng"): Prom
     await promisify(execFile)(command, ["-o", "max", "--strip", "safe", "--alpha", path]);
     return true;
   } catch (error) {
+    // A missing executable fails to spawn with ENOENT; a failing run
+    // carries its exit code.
     const { code, stderr } = error as { code?: unknown; stderr?: string };
+    if (code === "ENOENT") {
+      console.warn(`oxipng skipped: ${command} is not installed`);
+      return false;
+    }
     if (typeof code !== "number") throw error;
     console.warn(`oxipng skipped (exit ${code}): ${stderr?.trim()}`);
     return false;

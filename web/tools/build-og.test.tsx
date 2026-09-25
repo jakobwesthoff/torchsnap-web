@@ -96,6 +96,16 @@ describe("compressWithOxipng", () => {
     expect((await sharp(path).ensureAlpha().raw().toBuffer()).equals(pixelsBefore)).toBe(true);
   });
 
+  it("skips compression when oxipng is not installed", async () => {
+    const path = await samplePng();
+    const sizeBefore = (await stat(path)).size;
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    expect(await compressWithOxipng(path, "oxipng-not-installed")).toBe(false);
+    expect((await stat(path)).size).toBe(sizeBefore);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("oxipng skipped"));
+  });
+
   it("fails when oxipng cannot be started for another reason", async () => {
     const notExecutable = join(dir, "oxipng");
     await writeFile(notExecutable, "not a program", { mode: 0o644 });
