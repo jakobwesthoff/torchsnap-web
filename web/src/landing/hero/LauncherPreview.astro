@@ -28,10 +28,7 @@ const QUERY = "gho";
 
 const RESULTS: Result[] = [
   {
-    title: [
-      { t: "Gho", m: true },
-      { t: "stty" },
-    ],
+    title: [{ t: "Gho", m: true }, { t: "stty" }],
     subtitle: "/Applications/Ghostty.app",
     icon: "heroicons:command-line",
     selected: true,
@@ -97,9 +94,7 @@ const RESULTS: Result[] = [
     <div class="flex items-center gap-3 px-5 py-4">
       <Icon name="heroicons:magnifying-glass" class="h-5 w-5 shrink-0 text-accent" />
       <span class="flex-1 text-lg text-text-primary">{QUERY}</span>
-      <span class="keycap rounded px-2 py-0.5 text-[11px] text-text-secondary">
-        Esc
-      </span>
+      <span class="keycap rounded px-2 py-0.5 text-[11px] text-text-secondary">Esc</span>
     </div>
 
     <div class="border-t border-border"></div>
@@ -118,9 +113,7 @@ const RESULTS: Result[] = [
           </div>
           <div class="min-w-0 flex-1">
             <div class="truncate text-sm text-text-primary">
-              {r.title.map((seg) =>
-                seg.m ? <span class="text-accent">{seg.t}</span> : seg.t,
-              )}
+              {r.title.map((seg) => (seg.m ? <span class="text-accent">{seg.t}</span> : seg.t))}
             </div>
             <div class="truncate text-xs text-text-muted">{r.subtitle}</div>
           </div>

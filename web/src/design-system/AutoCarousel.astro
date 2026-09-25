@@ -101,9 +101,7 @@ const {
     "[data-auto-carousel]:not([data-auto-carousel-init])",
   );
 
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   for (const strip of strips) {
     strip.dataset.autoCarouselInit = "";

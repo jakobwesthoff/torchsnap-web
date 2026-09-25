@@ -151,7 +151,12 @@ const tree = (
       backgroundColor: SURFACE,
     }}
   >
-    <img src={snappyDataUrl} width={snappyW} height={snappyH} style={{ display: "block", marginBottom: 28 }} />
+    <img
+      src={snappyDataUrl}
+      width={snappyW}
+      height={snappyH}
+      style={{ display: "block", marginBottom: 28 }}
+    />
     {/* Text block laid out as block flow rather than a flex gap so
         the eyebrow's bottom margin (typographic spacing) does the
         work, not an out-of-band layout property. */}
@@ -203,10 +208,10 @@ await writeFile(OUT, resvg.render().asPng());
 console.log(`wrote ${OUT}`);
 
 // Compress with oxipng if available. Skips silently when not on PATH.
-const oxipng = Bun.spawn(
-  ["oxipng", "-o", "max", "--strip", "safe", "--alpha", OUT],
-  { stdout: "pipe", stderr: "pipe" },
-);
+const oxipng = Bun.spawn(["oxipng", "-o", "max", "--strip", "safe", "--alpha", OUT], {
+  stdout: "pipe",
+  stderr: "pipe",
+});
 const exitCode = await oxipng.exited;
 if (exitCode === 0) {
   console.log("oxipng: compressed");

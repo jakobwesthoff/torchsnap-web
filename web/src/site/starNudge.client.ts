@@ -58,7 +58,10 @@ export function initStarNudge(): void {
       "d",
       `M ${shaftX} ${shaftY} C ${shaftX + 38} ${shaftY + 6}, ${tipX - 6} ${tipY + 34}, ${tipX} ${tipY}`,
     );
-    head!.setAttribute("d", `M ${tipX - 8} ${tipY + 13} L ${tipX} ${tipY} L ${tipX + 9} ${tipY + 12}`);
+    head!.setAttribute(
+      "d",
+      `M ${tipX - 8} ${tipY + 13} L ${tipX} ${tipY} L ${tipX + 9} ${tipY + 12}`,
+    );
 
     // The host is zero-height, so the SVG needs an explicit height to
     // contain the label. Strokes and the rotated text still spill past

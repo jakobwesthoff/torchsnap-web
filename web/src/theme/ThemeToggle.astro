@@ -27,23 +27,21 @@ const OPTIONS = [
     style="width: 28px; height: 28px;"
   ></div>
 
-  {
-    OPTIONS.map(({ value, icon, label }) => (
-      <button
-        type="button"
-        role="radio"
-        data-value={value}
-        aria-label={label}
-        aria-checked="false"
-        class={cn(
-          "theme-toggle-option relative z-10 cursor-pointer rounded-full p-1.5 transition-colors",
-          "text-text-muted hover:text-text-secondary",
-        )}
-      >
-        <Icon name={icon} class="h-4 w-4" />
-      </button>
-    ))
-  }
+  {OPTIONS.map(({ value, icon, label }) => (
+    <button
+      type="button"
+      role="radio"
+      data-value={value}
+      aria-label={label}
+      aria-checked="false"
+      class={cn(
+        "theme-toggle-option relative z-10 cursor-pointer rounded-full p-1.5 transition-colors",
+        "text-text-muted hover:text-text-secondary",
+      )}
+    >
+      <Icon name={icon} class="h-4 w-4" />
+    </button>
+  ))}
 </div>
 
 <style is:global>

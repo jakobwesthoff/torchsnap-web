@@ -68,7 +68,7 @@ body {
 /* Section eyebrow / kicker label: small, bold, uppercase, accent-coloured.
  * Sits above section headlines and as the catalog tag on cards. */
 @utility eyebrow {
-  @apply text-sm font-bold uppercase tracking-[0.2em] text-accent;
+  @apply text-sm font-bold tracking-[0.2em] text-accent uppercase;
 }
 
 /* Keyboard cap (`<kbd>`) shared structure: bordered, mono, inset
@@ -82,9 +82,9 @@ body {
 @utility section-inner {
   margin-inline: auto;
   max-width: 1280px;
-  padding-inline: 1.5rem;       /* 24px = px-6 */
+  padding-inline: 1.5rem; /* 24px = px-6 */
   @media (min-width: 1024px) {
-    padding-inline: 4rem;       /* 64px = lg:px-16 */
+    padding-inline: 4rem; /* 64px = lg:px-16 */
   }
 }
 

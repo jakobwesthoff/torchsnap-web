@@ -16,8 +16,7 @@
 
 import { readFile } from "node:fs/promises";
 
-const FEED_URL =
-  "https://github.com/jakobwesthoff/torchsnap/releases/latest/download/release.json";
+const FEED_URL = "https://github.com/jakobwesthoff/torchsnap/releases/latest/download/release.json";
 
 export interface LatestRelease {
   /** Version without a leading `v`, e.g. `0.12.0`. */

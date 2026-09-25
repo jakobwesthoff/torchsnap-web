@@ -36,9 +36,7 @@ const CYCLE = STEP * COMBOS.length;
             aria-hidden={idx === 0 ? undefined : "true"}
           >
             {combo.keys.map((k) => (
-              <kbd
-                class="keycap h-7 min-w-[28px] rounded-md px-2 text-sm text-text-primary shadow-[inset_0_-1px_0_var(--color-border)]"
-              >
+              <kbd class="keycap h-7 min-w-[28px] rounded-md px-2 text-sm text-text-primary shadow-[inset_0_-1px_0_var(--color-border)]">
                 {k}
               </kbd>
             ))}
@@ -49,9 +47,7 @@ const CYCLE = STEP * COMBOS.length;
       <span>anywhere. That's the whole interaction model.</span>
     </p>
 
-    <p class="mt-3 text-xs text-text-muted">
-      Bind it to whatever fits your fingers.
-    </p>
+    <p class="mt-3 text-xs text-text-muted">Bind it to whatever fits your fingers.</p>
   </div>
 </section>
 
@@ -66,15 +62,18 @@ const CYCLE = STEP * COMBOS.length;
   }
 
   @keyframes hotkey-fade {
-    0%, 3% {
+    0%,
+    3% {
       opacity: 0;
     }
     /* Fade in over 3% of the cycle (≈0.36s when cycle = 12s). */
-    6%, 17% {
+    6%,
+    17% {
       opacity: 1;
     }
     /* Hold for ~14% of the cycle (≈1.68s), then fade out. */
-    20%, 100% {
+    20%,
+    100% {
       opacity: 0;
     }
   }

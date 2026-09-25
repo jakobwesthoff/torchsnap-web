@@ -66,8 +66,7 @@ export const FEATURED: FeaturedGadget[] = [
     name: "Emoji Picker",
     badge: "Bundled",
     hook: "An emoji picker that keeps up with the keyboard.",
-    body:
-      "The emoji your sentence is missing, two letters away. No menu hunt. No app switch. No break in the writing.",
+    body: "The emoji your sentence is missing, two letters away. No menu hunt. No app switch. No break in the writing.",
     icon: "heroicons:face-smile",
     tilt: "left",
     screenshot: { light: emojiPickerScreenshotLight, dark: emojiPickerScreenshotDark },
@@ -78,8 +77,7 @@ export const FEATURED: FeaturedGadget[] = [
     name: "Calculator",
     badge: "Bundled",
     hook: "A calculator that doesn't need its own window.",
-    body:
-      "Mid-thought, you need a number. Type the expression, the answer's already underneath it. The same expression, tomorrow morning, still one keystroke away.",
+    body: "Mid-thought, you need a number. Type the expression, the answer's already underneath it. The same expression, tomorrow morning, still one keystroke away.",
     icon: "heroicons:calculator",
     tilt: "right",
     screenshot: { light: calculatorScreenshotLight, dark: calculatorScreenshotDark },
@@ -90,8 +88,7 @@ export const FEATURED: FeaturedGadget[] = [
     name: "Bangs",
     badge: "Bundled",
     hook: "Search the web without first opening the web.",
-    body:
-      "`!gh torchsnap`. `keyboard !wiki`. `!yt synth wave`. Every DuckDuckGo bang, recognized at the start, the end, wherever it falls out of your fingers. The browser skips the search engine entirely and opens on the answer page.",
+    body: "`!gh torchsnap`. `keyboard !wiki`. `!yt synth wave`. Every DuckDuckGo bang, recognized at the start, the end, wherever it falls out of your fingers. The browser skips the search engine entirely and opens on the answer page.",
     icon: "heroicons:arrow-top-right-on-square",
     tilt: "left",
     screenshot: { light: bangsScreenshotLight, dark: bangsScreenshotDark },

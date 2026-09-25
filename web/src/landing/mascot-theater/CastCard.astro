@@ -34,9 +34,11 @@ const { entry, tilt = false } = Astro.props;
         ? "border-text-muted/30 bg-[radial-gradient(circle_at_80%_18%,rgb(255_240_200/0.55),transparent_60%),linear-gradient(180deg,oklch(0.96_0.025_265)_0%,oklch(0.90_0.035_270)_100%)] dark:border-white/15 dark:bg-[radial-gradient(circle_at_80%_18%,rgb(255_255_220/0.22),transparent_60%),linear-gradient(180deg,oklch(0.25_0.07_265)_0%,oklch(0.18_0.08_265)_100%)]"
         : "border-accent/35",
     ]}
-    style={entry.silhouette
-      ? undefined
-      : `background: radial-gradient(circle at 50% 60%, hsl(${TINTS[entry.id]} 80% 60% / 0.32), transparent 70%), var(--color-surface-inset);`}
+    style={
+      entry.silhouette
+        ? undefined
+        : `background: radial-gradient(circle at 50% 60%, hsl(${TINTS[entry.id]} 80% 60% / 0.32), transparent 70%), var(--color-surface-inset);`
+    }
   >
     {entry.silhouette && (
       <span
@@ -53,7 +55,8 @@ const { entry, tilt = false } = Astro.props;
       format="webp"
       class:list={[
         "max-h-[92%] max-w-[92%] object-contain drop-shadow-[0_6px_12px_rgb(0_0_0/0.18)]",
-        entry.silhouette && "opacity-50 [filter:brightness(0)] dark:[filter:brightness(0)_drop-shadow(0_0_6px_rgb(255_255_220/0.22))_drop-shadow(0_0_18px_rgb(255_255_220/0.12))]",
+        entry.silhouette &&
+          "opacity-50 [filter:brightness(0)] dark:[filter:brightness(0)_drop-shadow(0_0_6px_rgb(255_255_220/0.22))_drop-shadow(0_0_18px_rgb(255_255_220/0.12))]",
       ]}
     />
   </div>
@@ -62,7 +65,5 @@ const { entry, tilt = false } = Astro.props;
     {entry.eyebrow}
   </div>
   <h3 class="text-xl font-semibold leading-tight tracking-tight">{entry.headline}</h3>
-  <p class="mt-2.5 text-pretty text-sm leading-[1.5] text-text-secondary">
-    {entry.body}
-  </p>
+  <p class="mt-2.5 text-pretty text-sm leading-[1.5] text-text-secondary">{entry.body}</p>
 </article>

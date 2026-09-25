@@ -88,8 +88,7 @@ const ogImage = new URL("/og.png", origin).toString();
       // offset on first paint without a client-side reflow.
       (() => {
         const stored = localStorage.getItem("theme");
-        const preference =
-          stored === "light" || stored === "dark" ? stored : "system";
+        const preference = stored === "light" || stored === "dark" ? stored : "system";
         const resolved =
           preference === "system"
             ? window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -112,7 +111,9 @@ const ogImage = new URL("/og.png", origin).toString();
         and constrain their content + border with an inner
         mx-auto max-w-[1280px] wrapper. Same pattern Header / Footer
         already use. */}
-    <main class="flex w-full flex-1 flex-col"><slot /></main>
+    <main class="flex w-full flex-1 flex-col">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>

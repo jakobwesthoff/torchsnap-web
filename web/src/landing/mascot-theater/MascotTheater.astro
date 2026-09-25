@@ -27,47 +27,49 @@ const BOTTOM_ROW = CAST.slice(4);
   ></div>
 
   <div class="section-inner pt-14 pb-24 lg:pb-32">
-  {/* Section head */}
-  <div class="mb-12 text-center lg:mb-20">
-    <p class="eyebrow mb-4">
-      Meet the cast
-    </p>
-    <h2 class="text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl lg:text-[64px]">
-      Snappy refuses to wear<br />
-      <span class="font-medium italic text-accent">the same thing twice.</span>
-    </h2>
-    <p class="mx-auto mt-6 max-w-[680px] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
-      150-plus costumes in the closet. Snappy picks a different one
-      every time you summon the launcher, saves the bunny for Easter,
-      the witch for Halloween, and something with claws for the full
-      moon. Snappy is, frankly, a little weird about cosplay. The good
-      kind of weird. We've stopped trying to talk Snappy out of it.
-    </p>
-  </div>
+    {/* Section head */}
+    <div class="mb-12 text-center lg:mb-20">
+      <p class="eyebrow mb-4">Meet the cast</p>
+      <h2 class="text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl lg:text-[64px]">
+        Snappy refuses to wear
+        <br />
+        <span class="font-medium italic text-accent">the same thing twice.</span>
+      </h2>
+      <p class="mx-auto mt-6 max-w-[680px] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
+        150-plus costumes in the closet. Snappy picks a different one every time you summon the
+        launcher, saves the bunny for Easter, the witch for Halloween, and something with claws for
+        the full moon. Snappy is, frankly, a little weird about cosplay. The good kind of weird.
+        We've stopped trying to talk Snappy out of it.
+      </p>
+    </div>
 
-  {/* Mobile: auto-cycling, swipeable carousel. The negative margin
+    {/* Mobile: auto-cycling, swipeable carousel. The negative margin
       pulls the strip flush to the viewport edges; AutoCarousel adds
       its own symmetric edge padding so the first and last cards
       centre under their snap point. */}
-  <div class="-mx-6 sm:hidden">
-    <AutoCarousel
-      ariaLabel="Snappy mascot cast"
-      intervalMs={3000}
-      pauseAfterInteractionMs={5000}
-    >
-      {CAST.map((c) => <li><CastCard entry={c} /></li>)}
-    </AutoCarousel>
-  </div>
+    <div class="-mx-6 sm:hidden">
+      <AutoCarousel ariaLabel="Snappy mascot cast" intervalMs={3000} pauseAfterInteractionMs={5000}>
+        {CAST.map((c) => (
+          <li>
+            <CastCard entry={c} />
+          </li>
+        ))}
+      </AutoCarousel>
+    </div>
 
-  {/* Desktop: top row — 4 polaroids */}
-  <div class="mx-auto hidden max-w-[1280px] grid-cols-2 gap-10 sm:grid lg:grid-cols-4 lg:gap-12">
-    {TOP_ROW.map((c) => <CastCard entry={c} tilt />)}
-  </div>
+    {/* Desktop: top row — 4 polaroids */}
+    <div class="mx-auto hidden max-w-[1280px] grid-cols-2 gap-10 sm:grid lg:grid-cols-4 lg:gap-12">
+      {TOP_ROW.map((c) => (
+        <CastCard entry={c} tilt />
+      ))}
+    </div>
 
-  {/* Desktop: bottom row — 3 polaroids, slightly narrower so they
+    {/* Desktop: bottom row — 3 polaroids, slightly narrower so they
       don't read as a truncated 4-up. */}
-  <div class="mx-auto mt-10 hidden max-w-[1100px] grid-cols-2 gap-10 sm:grid lg:mt-14 lg:grid-cols-3 lg:gap-12">
-    {BOTTOM_ROW.map((c) => <CastCard entry={c} tilt />)}
-  </div>
+    <div class="mx-auto mt-10 hidden max-w-[1100px] grid-cols-2 gap-10 sm:grid lg:mt-14 lg:grid-cols-3 lg:gap-12">
+      {BOTTOM_ROW.map((c) => (
+        <CastCard entry={c} tilt />
+      ))}
+    </div>
   </div>
 </section>

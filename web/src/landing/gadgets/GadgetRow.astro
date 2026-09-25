@@ -32,12 +32,7 @@ const screenshotFirst = index % 2 === 1;
 const bodyParts = gadget.body.split("`");
 ---
 
-<article
-  class:list={[
-    "grid items-center gap-10 lg:gap-20",
-    "md:grid-cols-2",
-  ]}
->
+<article class:list={["grid items-center gap-10 lg:gap-20", "md:grid-cols-2"]}>
   {/* Copy column. The `max-w-[520px]` cap only kicks in once
       we hit the desktop two-column layout — on mobile the
       copy fills the available section width naturally rather
@@ -56,27 +51,22 @@ const bodyParts = gadget.body.split("`");
         organically inside the body copy ("`:`", "`!`", "`=`")
         and the slug isn't doing marketing work. */}
     <div class="mb-5 flex flex-wrap items-center gap-2.5">
-      <span
-        class="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-accent"
-      >
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-accent">
         <Icon name={gadget.icon} class="h-3.5 w-3.5" />
         {gadget.badge}
       </span>
     </div>
 
-    <h3
-      class="text-balance text-2xl font-semibold leading-[1.15] tracking-tight md:text-[28px] lg:text-[32px]"
-    >
-      {gadget.name}.{" "}
-      <span class="text-text-secondary">{gadget.hook}</span>
+    <h3 class="text-balance text-2xl font-semibold leading-[1.15] tracking-tight md:text-[28px] lg:text-[32px]">
+      {gadget.name}. <span class="text-text-secondary">{gadget.hook}</span>
     </h3>
 
-    <p
-      class="mt-4 text-pretty text-base leading-relaxed text-text-secondary"
-    >
+    <p class="mt-4 text-pretty text-base leading-relaxed text-text-secondary">
       {bodyParts.map((part, i) =>
         i % 2 === 1 ? (
-          <code class="rounded bg-surface-inset px-1 py-0.5 font-mono text-[0.9em] text-text-primary">{part}</code>
+          <code class="rounded bg-surface-inset px-1 py-0.5 font-mono text-[0.9em] text-text-primary">
+            {part}
+          </code>
         ) : (
           part
         ),
@@ -93,7 +83,9 @@ const bodyParts = gadget.body.split("`");
       <a
         href={gadget.docs}
         class="border-b border-dashed border-border text-text-secondary hover:text-text-primary transition-colors"
-      >How it works<span class="sr-only">: the {gadget.name} Gadget</span></a>
+      >
+        How it works<span class="sr-only">: the {gadget.name} Gadget</span>
+      </a>
     </p>
   </div>
 
@@ -101,23 +93,14 @@ const bodyParts = gadget.body.split("`");
       that matches the row's parity. On mobile the row
       collapses to a stack and the screenshot lands underneath
       the copy as the visual payoff. */}
-  <div
-    class:list={[
-      "md:row-start-1",
-      screenshotFirst ? "md:col-start-1" : "md:col-start-2",
-    ]}
-  >
+  <div class:list={["md:row-start-1", screenshotFirst ? "md:col-start-1" : "md:col-start-2"]}>
     {/* Strip the tilt below the desktop breakpoint — a tilted
         card at narrow widths reads as broken rather than
         playful. The screenshot component tags its tilted root
         with `data-tilt-target` so we can flatten only that
         element without poking at internals. */}
     <div class="[&_[data-tilt-target]]:max-md:!rotate-0">
-      <GadgetScreenshot
-        tilt={gadget.tilt}
-        image={gadget.screenshot}
-        alt={gadget.alt}
-      />
+      <GadgetScreenshot tilt={gadget.tilt} image={gadget.screenshot} alt={gadget.alt} />
     </div>
   </div>
 </article>
