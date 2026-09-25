@@ -106,9 +106,11 @@ export interface TrimResult {
 export async function trimImage({ input, output, padding }: ParsedArgs): Promise<TrimResult> {
   // Verify the input exists up front so we can give a clear
   // error rather than the cryptic message sharp throws when
-  // it tries to decode a missing file.
+  // it tries to decode a missing file. Its size is taken here,
+  // because `--in-place` overwrites the file below.
+  let inputBytes: number;
   try {
-    await stat(input);
+    inputBytes = (await stat(input)).size;
   } catch {
     throw new Error(`input not found: ${input}`);
   }
@@ -143,7 +145,6 @@ export async function trimImage({ input, output, padding }: ParsedArgs): Promise
   const buf = await pipeline.toBuffer();
   await writeFile(output, buf);
 
-  const inputBytes = (await stat(input)).size;
   const meta = await sharp(buf).metadata();
   return { width: meta.width, height: meta.height, inputBytes, outputBytes: buf.byteLength };
 }

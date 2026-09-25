@@ -110,6 +110,17 @@ describe("trimImage", () => {
     expect(result.outputBytes).toBe((await stat(output)).size);
   });
 
+  it("reports the original input size when trimming in place", async () => {
+    const input = await framedImage();
+    const originalBytes = (await stat(input)).size;
+
+    const result = await trimImage({ input, output: input, padding: 0 });
+
+    expect(result.inputBytes).toBe(originalBytes);
+    expect(result.outputBytes).toBe((await stat(input)).size);
+    expect(result.outputBytes).not.toBe(originalBytes);
+  });
+
   it("fails clearly when the input does not exist", async () => {
     const input = join(dir, "missing.png");
 
