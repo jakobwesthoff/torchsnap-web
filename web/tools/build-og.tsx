@@ -42,10 +42,12 @@ import { Resvg } from "@resvg/resvg-js";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 // Minimal JSX factory that produces the {type, props} shape Satori
 // consumes. Children flatten and pass through unchanged.
-function jsx(type: string, props: Record<string, unknown> | null, ...children: unknown[]) {
+export function jsx(type: string, props: Record<string, unknown> | null, ...children: unknown[]) {
   const flat = children.flat(Infinity);
   return {
     type,
@@ -59,7 +61,7 @@ function jsx(type: string, props: Record<string, unknown> | null, ...children: u
 // TypeScript looks up the JSX types on the classic factory's namespace
 // before the global one, so declaring them here keeps them out of every
 // other file. Satori takes any HTML tag with arbitrary props.
-declare namespace jsx {
+export declare namespace jsx {
   namespace JSX {
     type Element = ReturnType<typeof jsx>;
     interface IntrinsicElements {
@@ -102,13 +104,6 @@ const SURFACE = "#1c1c1e";
 const TOP = "#f87316"; // rgb(248,115,22)
 const BOT = "#da7707"; // rgb(218,119,7)
 
-const [semibold, bold, snappyPng] = await Promise.all([
-  readFile(FONT_SEMIBOLD_PATH),
-  readFile(FONT_BOLD_PATH),
-  readFile(SNAPPY_PATH),
-]);
-const snappyDataUrl = `data:image/png;base64,${snappyPng.toString("base64")}`;
-
 // Slack shows link-card images in a square slot and centre-crops the
 // 1200×630 card to its middle 630×630. Mascot, eyebrow and wordmark
 // are therefore stacked vertically and sized so the whole group fits
@@ -139,83 +134,110 @@ const snappyH = SNAPPY_VISIBLE_HEIGHT;
 const EYEBROW_FONT = 32.6;
 const WORDMARK_FONT = 104;
 
-const tree = (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      width: "100%",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: SURFACE,
-    }}
-  >
-    <img
-      src={snappyDataUrl}
-      width={snappyW}
-      height={snappyH}
-      style={{ display: "block", marginBottom: 28 }}
-    />
-    {/* Text block laid out as block flow rather than a flex gap so
-        the eyebrow's bottom margin (typographic spacing) does the
-        work, not an out-of-band layout property. */}
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div
-        style={{
-          fontSize: EYEBROW_FONT,
-          fontWeight: 700,
-          lineHeight: 1,
-          letterSpacing: EYEBROW_FONT * 0.2,
-          textTransform: "uppercase",
-          marginBottom: Math.round(EYEBROW_FONT * 0.6),
-          backgroundImage: `linear-gradient(180deg, ${TOP} 0%, ${BOT} 100%)`,
-          backgroundClip: "text",
-          color: "transparent",
-        }}
-      >
-        {/* Satori applies letter-spacing to non-breaking spaces but
-            not to regular ones, and the separators need the same
-            tracking as the letters around them. */}
-        {"Light · Find · Launch"}
-      </div>
-      <div
-        style={{
-          fontSize: WORDMARK_FONT,
-          fontWeight: 600,
-          color: "#ffffff",
-          letterSpacing: WORDMARK_FONT * -0.025,
-          lineHeight: 1.05,
-        }}
-      >
-        Torchsnap
+export interface CardAssets {
+  semibold: Buffer;
+  bold: Buffer;
+  snappyPng: Buffer;
+}
+
+export async function renderCard({ semibold, bold, snappyPng }: CardAssets): Promise<Buffer> {
+  const snappyDataUrl = `data:image/png;base64,${snappyPng.toString("base64")}`;
+
+  const tree = (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: SURFACE,
+      }}
+    >
+      <img
+        src={snappyDataUrl}
+        width={snappyW}
+        height={snappyH}
+        style={{ display: "block", marginBottom: 28 }}
+      />
+      {/* Text block laid out as block flow rather than a flex gap so
+          the eyebrow's bottom margin (typographic spacing) does the
+          work, not an out-of-band layout property. */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div
+          style={{
+            fontSize: EYEBROW_FONT,
+            fontWeight: 700,
+            lineHeight: 1,
+            letterSpacing: EYEBROW_FONT * 0.2,
+            textTransform: "uppercase",
+            marginBottom: Math.round(EYEBROW_FONT * 0.6),
+            backgroundImage: `linear-gradient(180deg, ${TOP} 0%, ${BOT} 100%)`,
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          {/* Satori applies letter-spacing to non-breaking spaces but
+              not to regular ones, and the separators need the same
+              tracking as the letters around them. */}
+          {"Light · Find · Launch"}
+        </div>
+        <div
+          style={{
+            fontSize: WORDMARK_FONT,
+            fontWeight: 600,
+            color: "#ffffff",
+            letterSpacing: WORDMARK_FONT * -0.025,
+            lineHeight: 1.05,
+          }}
+        >
+          Torchsnap
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 
-const svg = await satori(tree as Parameters<typeof satori>[0], {
-  width: W,
-  height: H,
-  fonts: [
-    { name: "Inter", data: semibold, weight: 600, style: "normal" },
-    { name: "Inter", data: bold, weight: 700, style: "normal" },
-  ],
-});
+  const svg = await satori(tree as Parameters<typeof satori>[0], {
+    width: W,
+    height: H,
+    fonts: [
+      { name: "Inter", data: semibold, weight: 600, style: "normal" },
+      { name: "Inter", data: bold, weight: 700, style: "normal" },
+    ],
+  });
 
-const resvg = new Resvg(svg, { font: { loadSystemFonts: false } });
-await writeFile(OUT, resvg.render().asPng());
-console.log(`wrote ${OUT}`);
+  const resvg = new Resvg(svg, { font: { loadSystemFonts: false } });
+  return resvg.render().asPng();
+}
 
 // Compress with oxipng if available. Skips silently when not on PATH.
-const oxipng = Bun.spawn(["oxipng", "-o", "max", "--strip", "safe", "--alpha", OUT], {
-  stdout: "pipe",
-  stderr: "pipe",
-});
-const exitCode = await oxipng.exited;
-if (exitCode === 0) {
-  console.log("oxipng: compressed");
-} else {
-  const stderr = await new Response(oxipng.stderr).text();
-  console.warn(`oxipng skipped (exit ${exitCode}): ${stderr.trim()}`);
+export async function compressWithOxipng(path: string, command = "oxipng"): Promise<boolean> {
+  try {
+    await promisify(execFile)(command, ["-o", "max", "--strip", "safe", "--alpha", path]);
+    return true;
+  } catch (error) {
+    const { code, stderr } = error as { code?: unknown; stderr?: string };
+    if (typeof code !== "number") throw error;
+    console.warn(`oxipng skipped (exit ${code}): ${stderr?.trim()}`);
+    return false;
+  }
+}
+
+async function main(): Promise<void> {
+  const [semibold, bold, snappyPng] = await Promise.all([
+    readFile(FONT_SEMIBOLD_PATH),
+    readFile(FONT_BOLD_PATH),
+    readFile(SNAPPY_PATH),
+  ]);
+  await writeFile(OUT, await renderCard({ semibold, bold, snappyPng }));
+  console.log(`wrote ${OUT}`);
+
+  if (await compressWithOxipng(OUT)) {
+    console.log("oxipng: compressed");
+  }
+}
+
+if (import.meta.main) {
+  await main();
 }

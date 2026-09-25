@@ -29,13 +29,19 @@ All text on the site follows `docs/copywriting-guide.md`.
   the gate's outcome, run it once to get a baseline. If the baseline
   already fails, tell the user what fails and propose fixing it before
   starting the other work.
-- Code that runs on its own, such as the scripts in `web/tools/` and
-  helpers like `web/src/design-system/cn.ts`, gets thorough tests with
-  `bun test` whenever you touch it, edited code as much as new code.
-  Cover the error and edge cases, not just the happy path.
-- Work test-first there. For a bug, write a regression test that
-  reproduces it, run it and see it fail, then fix the code until it
-  passes.
+- Every piece of TypeScript you touch gets thorough Vitest tests
+  (`just test`), edited code as much as new code. Cover the error and
+  edge cases, not just the happy path. `just test-coverage` shows what
+  is still untested.
+- Browser behavior lives in `*.client.ts` modules next to their
+  component, which only imports and calls them. Test them under jsdom
+  (`// @vitest-environment jsdom`). Scripts that must stay inline, like
+  the pre-paint theme script in `Layout.astro`, are the exception.
+- Scripts in `web/tools/` export their logic and run `main` only under
+  `import.meta.main`, so tests import them without side effects. They
+  use `node:` APIs, not Bun globals, so Vitest can run them.
+- Work test-first. For a bug, write a regression test that reproduces
+  it, run it and see it fail, then fix the code until it passes.
 
 ## Todos
 

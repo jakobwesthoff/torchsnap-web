@@ -1,5 +1,6 @@
 dist/
 .astro/
+coverage/
 bun.lock
 
 # Prose in Markdown is wrapped by hand.

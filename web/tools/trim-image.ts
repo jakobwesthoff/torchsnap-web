@@ -21,15 +21,15 @@
 
 import sharp from "sharp";
 import { resolve, dirname, basename, extname, join } from "node:path";
-import { stat } from "node:fs/promises";
+import { stat, writeFile } from "node:fs/promises";
 
-interface ParsedArgs {
+export interface ParsedArgs {
   input: string;
   output: string;
   padding: number;
 }
 
-function parseArgs(argv: string[]): ParsedArgs {
+export function parseArgs(argv: string[]): ParsedArgs {
   const positionals: string[] = [];
   let inPlace = false;
   let padding = 0;
@@ -96,9 +96,14 @@ function parseArgs(argv: string[]): ParsedArgs {
   return { input, output, padding };
 }
 
-async function main(): Promise<void> {
-  const { input, output, padding } = parseArgs(process.argv.slice(2));
+export interface TrimResult {
+  width: number;
+  height: number;
+  inputBytes: number;
+  outputBytes: number;
+}
 
+export async function trimImage({ input, output, padding }: ParsedArgs): Promise<TrimResult> {
   // Verify the input exists up front so we can give a clear
   // error rather than the cryptic message sharp throws when
   // it tries to decode a missing file.
@@ -136,26 +141,35 @@ async function main(): Promise<void> {
   // write the same path in a single pipeline call, but writing
   // a buffer afterwards is fine and lets `--in-place` work.
   const buf = await pipeline.toBuffer();
-  await Bun.write(output, buf);
+  await writeFile(output, buf);
 
-  // Tiny status line so the caller can see what happened
-  // without asking — same style as the other tools/ scripts.
-  const inSize = (await stat(input)).size;
-  const outSize = buf.byteLength;
+  const inputBytes = (await stat(input)).size;
   const meta = await sharp(buf).metadata();
-  console.log(
-    `trimmed ${input} → ${output}` +
-      ` (${meta.width}×${meta.height}, ${formatBytes(inSize)} → ${formatBytes(outSize)})`,
-  );
+  return { width: meta.width, height: meta.height, inputBytes, outputBytes: buf.byteLength };
 }
 
-function formatBytes(n: number): string {
+export function formatBytes(n: number): string {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
   return `${(n / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-main().catch((err) => {
-  console.error(`trim-image: ${err instanceof Error ? err.message : err}`);
-  process.exit(1);
-});
+async function main(): Promise<void> {
+  const args = parseArgs(process.argv.slice(2));
+  const result = await trimImage(args);
+
+  // Tiny status line so the caller can see what happened
+  // without asking — same style as the other tools/ scripts.
+  console.log(
+    `trimmed ${args.input} → ${args.output}` +
+      ` (${result.width}×${result.height},` +
+      ` ${formatBytes(result.inputBytes)} → ${formatBytes(result.outputBytes)})`,
+  );
+}
+
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error(`trim-image: ${err instanceof Error ? err.message : err}`);
+    process.exit(1);
+  });
+}
