@@ -42,7 +42,7 @@ async function load(): Promise<LatestRelease> {
   try {
     version = JSON.parse(feed).version;
   } catch (e) {
-    throw new Error(`release.json from ${source} is not JSON: ${e}`);
+    throw new Error(`release.json from ${source} is not JSON: ${e}`, { cause: e });
   }
   if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
     throw new Error(`release.json from ${source} has no stable version: ${String(version)}`);
