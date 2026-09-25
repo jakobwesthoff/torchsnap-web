@@ -49,8 +49,11 @@ depends-on: [todos/<ulid>-<name>.md]
 - `depends-on` (optional): todos that must land first. Looser relations
   stay as prose in the body.
 
-Tags: none defined yet. Add a tag to this list before using it
-anywhere.
+Tags:
+
+- `testing`: test coverage and test tooling.
+
+Add a tag to this list before using it anywhere.
 
 ## Writing a todo
 
