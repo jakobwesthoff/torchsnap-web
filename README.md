@@ -18,7 +18,6 @@ Torchsnap repository, and anything it reuses from there is copied in
 | `assets/` | Sources for the OG card: the static Inter fonts and the trimmed mascot. |
 | `docs/adr/` | Architecture decision records, managed with the `adrs` tool. |
 | `docs/copywriting-guide.md` | Voice, character, and structure decisions for the site's copy. |
-| `design/` | HTML/CSS/JS prototypes from the first design iteration. |
 | `todos/` | Open work items that have been deferred. |
 
 ## Quick start
