@@ -8,6 +8,9 @@ in `assets/`, the ADRs in `docs/adr/`, and the copywriting guide in
 
 ## Requirements
 
+- [just](https://github.com/casey/just). The `justfile` at the
+  repository root is the entrypoint for every task below. Its recipes
+  run in `web/` and call the Bun scripts from `package.json`.
 - [Bun](https://bun.sh) as the package manager and script runner
   (ADR 0004). `bun.lock` is the committed lockfile.
 - Node.js 22.12 or newer. `bun run` starts the Astro CLI, and the CLI
@@ -18,11 +21,9 @@ in `assets/`, the ADRs in `docs/adr/`, and the copywriting guide in
 
 ## Development
 
-All commands run from `web/`.
-
 ```sh
-bun install
-bun run dev
+just install
+just dev
 ```
 
 The dev server and the build download the latest Torchsnap release's
@@ -30,7 +31,7 @@ The dev server and the build download the latest Torchsnap release's
 one, point them at a local file:
 
 ```sh
-TORCHSNAP_RELEASE_FEED=/path/to/release.json bun run dev
+TORCHSNAP_RELEASE_FEED=/path/to/release.json just dev
 ```
 
 The dev server listens on <http://localhost:4321>. It also accepts
@@ -41,13 +42,18 @@ testing OG cards and share previews.
 ## Building
 
 ```sh
-bun install --frozen-lockfile
-bun run build
-bun run preview
+just install
+just build
+just preview
 ```
 
-`bun run build` writes the static site to `web/dist/`, and
-`bun run preview` serves that folder on <http://localhost:4321>.
+`just install` installs exactly the versions in `bun.lock`.
+`just build` writes the static site to `web/dist/`, and `just preview`
+serves that folder on <http://localhost:4321>.
+
+`just fullcycle` is the quality gate: it installs, runs every check and
+builds the site. It must pass before every push, and the deploy workflow
+runs it as well.
 
 The build output contains:
 
@@ -94,39 +100,39 @@ change, and commit the results.
 
 | Command | Source | Output |
 | --- | --- | --- |
-| `bun run build:favicon` | `src/assets/mascots/snappy-original-1024.png` | `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-192-maskable.png` in `public/` |
-| `bun run build:og` | `assets/og/snappy-trimmed.png` and the Inter TTFs in `assets/fonts/` (repository root) | `public/og.png` |
+| `just build-favicon` | `src/assets/mascots/snappy-original-1024.png` | `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-192-maskable.png` in `public/` |
+| `just build-og` | `assets/og/snappy-trimmed.png` and the Inter TTFs in `assets/fonts/` (repository root) | `public/og.png` |
 
-`build:og` renders the card with satori. The eyebrow's font size is
+`build-og` renders the card with satori. The eyebrow's font size is
 calibrated so its width matches the wordmark. After a satori upgrade,
 compare the new `og.png` with the committed one, and re-measure the
 width as described in `tools/build-og.tsx` if it no longer matches.
 
-`bun run trim:image` removes fully transparent margins from an image,
-for screenshots placed on the landing page:
+`just trim-image` removes fully transparent margins from an image, for
+screenshots placed on the landing page. It runs in `web/`, so pass
+absolute paths or paths relative to `web/`:
 
 ```sh
-bun run trim:image <input>                  # writes <name>.trimmed.<ext>
-bun run trim:image <input> <output>
-bun run trim:image <input> --in-place
-bun run trim:image <input> --padding 16     # keeps 16 px of margin
+just trim-image <input>                  # writes <name>.trimmed.<ext>
+just trim-image <input> <output>
+just trim-image <input> --in-place
+just trim-image <input> --padding 16     # keeps 16 px of margin
 ```
 
 ## Releasing
 
 The site is published with GitHub Pages under the custom domain
 `torchsnap.app` (ADR 0007). The workflow `.github/workflows/deploy.yml`
-at the repository root builds the site on every push to `main`, on pull
-requests, and on manual runs. It deploys `web/dist/` only from `main`,
-and only while the repository is public. A private repository gets the
-build as CI and no deployment.
+at the repository root runs `just fullcycle` on every push to `main`, on
+pull requests, and on manual runs. It deploys `web/dist/` only from
+`main`, and only while the repository is public. A private repository
+gets the checks and the build as CI and no deployment.
 
 Before pushing a change to `main`:
 
-1. Run `bun install --frozen-lockfile`.
-2. Run `bun run build` and confirm it finishes with only the expected
-   warning listed above.
-3. Run `bun run preview` and check both pages in a browser, in light and
+1. Run `just fullcycle` and confirm it passes and the build prints only
+   the expected warning listed above.
+2. Run `just preview` and check both pages in a browser, in light and
    dark mode.
 
 The first deployment needs these repository settings:

@@ -22,11 +22,15 @@ Torchsnap repository, and anything it reuses from there is copied in
 
 ## Quick start
 
+The `justfile` at the repository root is the entrypoint for installing,
+developing, building and checking the site. `just --list` shows every
+recipe.
+
 ```sh
-cd web
-bun install
-bun run dev
+just install
+just dev
 ```
 
-The dev server listens on <http://localhost:4321>. See
-[web/README.md](web/README.md) for the full build and release process.
+The dev server listens on <http://localhost:4321>. `just fullcycle` runs
+all quality gates and the build. See [web/README.md](web/README.md) for
+the full build and release process.

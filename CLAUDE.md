@@ -20,8 +20,10 @@ All text on the site follows `docs/copywriting-guide.md`.
 
 ## Tests and quality gates
 
-- The quality gate is `bun run build` in `web/`. It must succeed with
-  only the warnings listed in `web/README.md`, "Expected build
+- The root `justfile` is the entrypoint for every task. Add new tasks
+  there as recipes.
+- The quality gate is `just fullcycle`. It must pass, and the build must
+  print only the warnings listed in `web/README.md`, "Expected build
   warnings". Fix any other warning or error.
 - At the start of a session, before the first change that can affect
   the gate's outcome, run it once to get a baseline. If the baseline
