@@ -1,30 +1,34 @@
-# Dynamic: Mascot perch + cosplay cycler
+---
+kind: feature
+status: open
+area: [web/src/landing/hero/LauncherPreview.astro]
+---
 
-Replace the static mascot above the launcher card with the
-auto-rotating cosplay cycler from the design: random initial
-variant, periodic auto-cycle, small name-tag badge that cross-fades
-on change. No manual prev/next controls — the design relies on
-auto-rotation only. Mounted as an Astro React island.
+# Cycle Snappy's costumes on the hero launcher card
+
+The mascot perched on the hero's launcher card is a static
+`snappy-original-1024.png` (`web/src/landing/hero/LauncherPreview.astro`).
+The design replaces it with an auto-rotating costume cycler: a random
+initial costume, an automatic advance every 2.6 s, and a small name-tag
+pill below the mascot showing the costume name and an `NN/NN` index,
+cross-faded on each change. There are no manual prev/next controls.
 
 ## Scope
 
-- `web/src/launcher/MascotCycler.tsx` (or similar) — list of
-  available cosplay variants, state machine for current index,
-  auto-advance interval matching the design (~2.6s), cross-fade
-  animation on variant change.
-- Cosplay assets: copy the cosplay set from
-  `design/iteration01/project/assets/mascots/` into
-  `web/public/mascots/` so it shares the stable public URL space
-  used by the header logo and footer wordmark.
-- Name-tag pill below the mascot showing the current variant name
-  and a small `NN/NN` index, cross-faded on change. Match the
-  design's surface/border styling.
-- Honor `prefers-reduced-motion: reduce` — pause auto-rotation and
-  show a single (random) variant statically.
-- Wire the cycler into the hero so it sits perched on top of the
-  launcher card.
+- Costume images: `web/src/assets/mascots/`, already bound by id in
+  `MASCOTS` in `web/src/landing/mascot-theater/cast.ts`. The current
+  mascot goes through `astro:assets` (webp, densities 1/2/3, eager,
+  high fetch priority); the cycler must not lose that.
+- Name-tag pill styled with the site's surface and border tokens.
+- With `prefers-reduced-motion: reduce`, show one random costume and do
+  not rotate.
 
-## Reference
+## Design reference
 
-`design/iteration01/project/src/V1bClassicHeroSnappy.standalone.jsx`
-— `V1B_COSPLAY` list, the auto-cycle effect, `CosplayNameTag`.
+The design was removed from the repo in `aa6e2b7`. Read it from the
+commit before:
+
+    git show aa6e2b7^:design/iteration01/project/src/V1bClassicHeroSnappy.standalone.jsx
+
+It has the `V1B_COSPLAY` list, the auto-cycle effect and
+`CosplayNameTag`.
