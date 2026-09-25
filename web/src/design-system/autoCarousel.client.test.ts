@@ -173,6 +173,17 @@ describe("auto-advance", () => {
     expect(scrollTo).toHaveBeenLastCalledWith({ left: 2 * STEP, behavior: "smooth" });
   });
 
+  it("steps by the slide width alone when the strip has no gap", () => {
+    const { strip, scrollTo } = renderStrip();
+    strip.style.removeProperty("column-gap");
+    initAutoCarousels();
+    setInView(strip, true);
+
+    vi.advanceTimersByTime(1_000);
+
+    expect(scrollTo).toHaveBeenLastCalledWith({ left: SLIDE_WIDTH, behavior: "smooth" });
+  });
+
   it("uses a 4 s interval when the strip names none", () => {
     const { strip, scrollTo } = renderStrip({ interval: "" });
     initAutoCarousels();

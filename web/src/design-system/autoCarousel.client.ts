@@ -38,7 +38,9 @@ export function initAutoCarousels(): void {
     const slideStep = (): number => {
       const first = strip.firstElementChild as HTMLElement | null;
       if (!first) return 0;
-      const gap = parseFloat(getComputedStyle(strip).columnGap || "0");
+      // Without a gap, the computed value is the keyword `normal`,
+      // which parses to NaN.
+      const gap = parseFloat(getComputedStyle(strip).columnGap) || 0;
       return first.getBoundingClientRect().width + gap;
     };
 
