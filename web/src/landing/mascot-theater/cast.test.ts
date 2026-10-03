@@ -41,6 +41,17 @@ describe("CAST", () => {
   });
 });
 
+describe("MASCOTS", () => {
+  // The ids are the mascot keys of the torchsnap-mascot set, and each
+  // image file carries its key in its name. A card whose id and file
+  // disagree would show one mascot under another one's name.
+  it("binds every id to the image file of the same key", () => {
+    for (const [id, image] of Object.entries(MASCOTS)) {
+      expect(image.src).toMatch(new RegExp(`/snappy-${id}-1024\\.png`));
+    }
+  });
+});
+
 describe("TINTS", () => {
   it("has a valid hue for every mascot", () => {
     expect(Object.keys(TINTS).sort()).toEqual(Object.keys(MASCOTS).sort());

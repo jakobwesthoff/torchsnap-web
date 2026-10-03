@@ -9,7 +9,7 @@ import vampire from "../../assets/mascots/snappy-cape-and-fangs-1024.png";
 import wanderer from "../../assets/mascots/snappy-time-wanderer-striped-scarf-2-1024.png";
 import adventurer from "../../assets/mascots/snappy-relic-hunter-idol-1024.png";
 import minion from "../../assets/mascots/snappy-banana-goggle-minion-1024.png";
-import slasher from "../../assets/mascots/snappy-striped-sweater-fedora-1024.png";
+import slasher from "../../assets/mascots/snappy-striped-sweater-claw-1024.png";
 import werewolf from "../../assets/mascots/snappy-werewolf-1024.png";
 
 export const MASCOTS = {
@@ -19,7 +19,7 @@ export const MASCOTS = {
   "time-wanderer-striped-scarf-2": wanderer,
   "relic-hunter-idol": adventurer,
   "banana-goggle-minion": minion,
-  "striped-sweater-fedora": slasher,
+  "striped-sweater-claw": slasher,
   werewolf,
 } as const;
 
@@ -36,7 +36,7 @@ export const TINTS: Record<MascotId, number> = {
   "time-wanderer-striped-scarf-2": 220, // cosmic blue (long stripey scarf is rainbow; tint stays neutral)
   "relic-hunter-idol": 35, // warm tan / leather
   "banana-goggle-minion": 50, // banana yellow
-  "striped-sweater-fedora": 15, // rusty red (sweater)
+  "striped-sweater-claw": 15, // rusty red (sweater)
   werewolf: 270, // unused: silhouette card uses its own night gradient
 };
 
@@ -92,7 +92,7 @@ export const CAST: CastEntry[] = [
     rot: -4,
   },
   {
-    id: "striped-sweater-fedora",
+    id: "striped-sweater-claw",
     eyebrow: "#031 · Slasher",
     headline: "Dream slayer",
     body: "Haunting your dreams. It knows what apps you want to launch next.",
