@@ -86,7 +86,7 @@ decoration.
 - **The mascot.** A small, hand-drawn character that perches on top
   of the launcher window. The original design appears at
   `web/src/assets/mascots/snappy-original-1024.png`.
-- **A wardrobe-collecting eccentric.** Snappy owns 150-plus costumes
+- **A wardrobe-collecting eccentric.** Snappy owns 500-plus costumes
   and picks a different one every time the launcher is summoned —
   *"saves the bunny for Easter, the witch for Halloween, and
   something with claws for the full moon."* —

@@ -27,7 +27,7 @@ export type MascotId = keyof typeof MASCOTS;
 
 // HSL hue per mascot. Drives the radial glow inside each polaroid frame
 // so the color reads as belonging to that costume rather than being a
-// generic accent. Hand-picked; if/when we scale to all 150+ mascots we
+// generic accent. Hand-picked; if/when we scale to all 500+ mascots we
 // can swap to a build-time sharp.stats() extraction.
 export const TINTS: Record<MascotId, number> = {
   original: 30, // orange — Snappy's natural color
