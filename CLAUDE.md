@@ -45,10 +45,14 @@ All text on the site follows `docs/copywriting-guide.md`.
 
 ## Todos
 
-Todos live in `todos/`. `todos/README.md` describes their format.
-
-- Once a todo is implemented, delete its file and every reference to it
-  (find them with `rg <ulid> . ../torchsnap ../torchsnap-docs`). If a
+- `todos/` is an ntropy vault; its `README.md` lists the components and
+  tags. File, update and close todos through the `ntropy-todos` skill,
+  never by writing files into `todos/all-notes/` by hand. Code comments
+  and docs cite a todo by its current filename without a path
+  (`<ULID>-<slug>.md`); a retitle renames the file, so update those
+  citations with it.
+- Once a todo is implemented, delete it and deal with every reference
+  to it (find them with `rg -i <ulid> . ../torchsnap ../torchsnap-docs`). If a
   referencing file needs information from the todo, copy just that part
   into it, compact and precise.
 - After a large work package is done, have Sonnet or Haiku agents
